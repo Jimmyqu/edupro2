@@ -11,60 +11,104 @@ import {Button,List, ListItem} from 'react-native-elements'
 import utils from '../common/utils'
 import StarRating from 'react-native-star-rating';
 
+const teacherUrl = utils.url+'WenDuEducation/api/teacher/teacherInfo';
 const width = utils.size.width;
-const my=[
-    {
-        name: 'Jimmy',
-        avatar_url: 'http://imgs.aixifan.com/cms/2018_02_22/1519293027325.png?imageView2/1/w/520/h/256',
-        subtitle: '15123456789'
-    },
-];
+// const my=[
+//     {
+//         name: 'Jimmy',
+//         subtitle: '15123456789'
+//     },
+// ];
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: '教师详情',
     });
+
+    constructor(props) {
+        super(props);
+        this.state={
+            data:null,
+            loading:false
+        }
+    }
+
+    _teacherInfo(data){
+        this.setState({
+            data:data,
+            loading:true
+        });
+        console.log(data)
+    }
+
+    componentDidMount() {
+        const { teacherId } = this.props.navigation.state.params;
+        const option={
+            teacherId:teacherId
+        }
+            utils.post(
+                teacherUrl,
+            utils.toQueryString(option),
+            this._teacherInfo.bind(this)
+        );
+
+    }
     render() {
+        const my = this.state.loading?[
+            {
+                name:this.state.data.data.name,
+                avatar_url:this.state.data.data.profilePhoto,
+                subtitle:this.state.data.data.place
+            }
+        ]:[];
+        console.log(my)
         return (
             <ScrollView style={{paddingBottom:20}}>
                 { /* other code from before here */ }
-                <Image
-                    style={styles.img}
-                    source={require('../img/math.png')}
-                />
-
-                <List containerStyle={{width:width,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center'}}>
-                    {
-                        my.map((l, i) => (
-                            <ListItem
-                                title={l.name}
-                                subtitle={l.subtitle}
-                                containerStyle={{justifyContent:'center', borderBottomWidth: 0,}}
-                                key={i}
-                                hideChevron={true}
+                {
+                    this.state.loading?
+                        (<View>
+                            <Image
+                                style={styles.img}
+                                source={require('../img/math.png')}
                             />
-                        ))
-                    }
-                    <View style={{width:100,position:'absolute',right:30,top:35,flexDirection:'row'}}>
-                        <StarRating
-                            starSize={12}
-                            emptyStarColor={'green'}
-                            iconSet={'FontAwesome'}
-                            emptyStar={'star-o'}
-                            fullStarColor={'#e60012'}
-                            disabled={false}
-                            maxStars={5}
-                            rating={5}
-                            starStyle={{marginLeft:5}}
-                        />
-                        <Text style={{fontSize:10,marginLeft:10}}>5分</Text>
-                    </View>
+                            <List containerStyle={{width:width,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center'}}>
+                                {
+                                    my.map((l, i) => (
+                                        <ListItem
+                                            title={l.name}
+                                            subtitle={l.subtitle}
+                                            containerStyle={{justifyContent:'center', borderBottomWidth: 0,}}
+                                            key={i}
+                                            hideChevron={true}
+                                        />
+                                    ))
+                                }
+                                <View style={{width:100,position:'absolute',right:30,top:35,flexDirection:'row'}}>
+                                    <StarRating
+                                        starSize={12}
+                                        emptyStarColor={'black'}
+                                        iconSet={'FontAwesome'}
+                                        emptyStar={'star-o'}
+                                        fullStarColor={'#e60012'}
+                                        disabled={false}
+                                        maxStars={5}
+                                        rating={this.state.data.data.score}
+                                        starStyle={{marginLeft:5}}
+                                    />
+                                    <Text style={{fontSize:10,marginLeft:10}}>{this.state.data.data.score}分</Text>
+                                </View>
 
-                </List>
-                <View style={styles.math_detail}>
-                    <Text style={styles.title}>[ 教师详情 ]</Text>
-                    <Text style={{lineHeight:30, paddingLeft:15,}}>吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致25</Text>
+                            </List>
+                            <View style={styles.math_detail}>
+                                <Text style={styles.title}>[ 教师详情 ]</Text>
+                                <Text style={{lineHeight:30, paddingLeft:15,}}>
+                                    {this.state.data.data.description}
+                                </Text>
+                            </View>
+                        </View>):null
+                }
 
-                </View>
+
             </ScrollView>
         );
     }

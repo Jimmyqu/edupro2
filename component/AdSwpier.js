@@ -13,7 +13,8 @@ import utils from './common/utils'
 import Swiper from 'react-native-swiper'
 
 const width = utils.width;
-url='http://rap2api.taobao.org/app/mock/5504/GET//example/1517900324538'
+// const url='http://rap2api.taobao.org/app/mock/5504/GET//example/1517900324538'  //mock
+const url=utils.url+'WenDuEducation/api/index/noticeList'
 export default class stars extends Component {
 
     constructor(porps) {
@@ -24,19 +25,23 @@ export default class stars extends Component {
         }
     }
     _renderIMG(data){
-        console.log(data)
         const arr=[];
-        for (let i in data.array){
+        for (let i in data.data){
             arr.push(
                 <View key={i} style={styles.slide}>
                     <TouchableOpacity
                         style={{flex :1}}
-                        onPress={()=>this.props.navigate('公告详情',{data:data.array[i].image})}
+                        onPress={()=>this.props.navigate('公告详情',{
+                            url:data.data[i].image.url,
+                            title:data.data[i].title,
+                            content: data.data[i].content,
+                            createTime:data.data[i].createTime
+                        })}
                     >
                         <Image
                             resizeMode='stretch'
                             style={styles.image}
-                            source={{uri:data.array[i].image}}
+                            source={{uri:data.data[i].image.url}}
                         />
                     </TouchableOpacity>
             </View>)
@@ -47,9 +52,20 @@ export default class stars extends Component {
             loading:true
         });
     }
+
     componentDidMount() {
-        utils.get(url,this._renderIMG.bind(this))  //绑定this 传递到_renderIMG中
+        // utils.get(url,this._renderIMG.bind(this))  //绑定this 传递到_renderIMG中
+        fetch(url,{
+            method: 'POST',
+            })
+            .then((response) => {
+                return response.json()
+            })
+            .then((responseData) => {
+                this._renderIMG(responseData);
+            });
     }
+
     render() {
         return (
             <View style={styles.container}>

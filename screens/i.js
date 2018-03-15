@@ -4,18 +4,185 @@ import {
     StyleSheet,
     Text,
     View,
-    Button,
     Image,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList,
+    BackHandler,
+    ToastAndroid,
 } from 'react-native';
 import AdSwiper from '../component/AdSwpier'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Divider ,List, ListItem} from 'react-native-elements'
-import classDetail from "../component/index/classDetail";
 import openClass from "../component/index/openclass";
-
+import { AsyncStorage } from 'react-native';
+import utils from '../component/common/utils'
+import Global from '../component/common/Global'
+const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList'
+const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList'
 export default class App extends Component{
+    constructor(props) {
+        super(props);
+        this.state={
+            openClass: null,
+            todayClass:null,
+            loading:false
+        }
+    }
+
+    _openClass(data){
+        const arr=[];
+        for (let i in data.data){
+            arr.push(
+                <View key={i} >
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('openClass',{type: '公开课',courseId:data.data[i].id,userId:Global.userId})}
+                    >
+                        <View style={styles.class_item}>
+                            <Image
+                                resizeMode="cover"
+                                blurRadius={1}
+                                style={{width:80,height:70,}}
+                                source={require('../static/img/1.jpg')}
+                                // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
+                            />
+                            <View style={styles.item_r}>
+                                <Text style={styles.item_r_title}>{data.data[i].title}</Text>
+                                <Text
+                                    numberOfLines={2}
+                                    style={styles.item_r_content}
+                                >
+                                    {data.data[i].description}
+                                </Text>
+
+                                <View style={styles.class_item_span}>
+                                    <Icon
+                                        style={{color:"#5eae00"}}
+                                        name="map-marker"
+                                        size={10}
+                                    />
+                                    <Text
+                                        style={styles.class_item_span_content}
+                                    >
+                                        {data.data[i].address}
+                                    </Text>
+                                </View>
+                                <View style={styles.class_item_span}>
+                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={10}/>
+                                    <Text
+                                        style={styles.class_item_span_content}
+                                    >
+                                        {data.data[i].timeSlot}
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider style={{height:3}}/>
+                </View>
+            )
+        }
+        this.setState({
+            openClass:arr,
+            loading:true
+        });
+    }
+
+    _todayClass(data){
+        console.log(data)
+        const arr=[];
+        for (let i in data.data){
+            arr.push(
+                <View key={i} >
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('openClass',
+                            {
+                                type: '今日课程',
+                                courseId:data.data[i].id,
+                                userId:Global.userId})
+                        }
+                    >
+                        <View style={styles.schedule_item}>
+                            <View style={styles.schedule_item_title}>
+                                <Text style={styles.title_l}>
+                                    {data.data[i].title}
+                                </Text>
+                                <Text style={styles.title_r}>
+                                    课程内容
+                                </Text>
+                            </View>
+                            <View style={styles.schedule_item_container}>
+                                <Text
+                                    style={styles.schedule_item_content}
+                                    numberOfLines={3}
+                                >
+                                    {'        '}{data.data[i].description}
+                                </Text>
+                                <View style={styles.icon_container}>
+                                    <View style={styles.class_item_span}>
+                                        <Icon name="map-marker" size={10} style={{color:"#5eae00"}}/>
+                                        <Text
+                                            style={styles.class_item_span_content}
+                                        >
+                                            {data.data[i].address}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.class_item_span}>
+                                        <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
+                                        <Text
+                                            style={styles.class_item_span_content}
+                                        >
+                                            {data.data[i].timeSlot}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                    <Divider style={{height:3}}/>
+                </View>
+            )
+
+        }
+        this.setState({
+            todayClass:arr,
+            loading:true
+        });
+    }
+    componentDidMount(){
+        //AsyncStorage.getItem('id').then((val) => {
+            const data={
+                userId:Global.userId
+            };
+            utils.post(
+                openClassUrl,
+                utils.toQueryString(data),
+                this._openClass.bind(this)
+            );
+            utils.post(
+                todayClassUrl,
+                utils.toQueryString(data),
+                this._todayClass.bind(this)
+            )
+        //})
+    }
+
+    //
+    // componentWillUnmount(){
+    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    // }
+    //
+    // onBackAndroid = () => {
+    //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+    //         //最近2秒内按过back键，可以退出应用。
+    //         return false;
+    //     }
+    //     this.lastBackPressed = Date.now();
+    //     ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+    //     return true;
+    // };
+
+
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -28,187 +195,12 @@ export default class App extends Component{
                 />
                 <View style={styles.public_class}>
                     <Text style={styles.title}>[ 公开课 ]</Text>
-                        <Divider style={{height:3}}/>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('openClass',{ type: '公开课'})}
-                        >
-                            <View style={styles.class_item}>
-                            <Image
-                                resizeMode="cover"
-                                blurRadius={1}
-                                style={{width:80,height:70,}}
-                                source={require('../static/img/1.jpg')}
-                                // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
-                            />
-                            <View style={styles.item_r}>
-                                <Text style={styles.item_r_title}>心理公开课</Text>
-                                <Text
-                                    numberOfLines={2}
-                                    style={styles.item_r_content}
-                                >
-                                    吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致
-                                </Text>
-
-                                <View style={styles.class_item_span}>
-                                    <Icon
-                                        style={{color:"#5eae00"}}
-                                        name="map-marker"
-                                        size={10}
-                                    />
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        1楼102
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={10}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        2018-03-07  09:30
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                        </TouchableOpacity>
-
-                        <Divider style={{height:3}}/>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',{ type: '公开课'})}
-                    >
-                        <View style={styles.class_item}>
-
-                            <Image
-                            resizeMode="cover"
-                            blurRadius={1}
-                            style={{width:80,height:70,}}
-                            source={require('../static/img/1.jpg')}
-                            //defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
-                        />
-                            <View style={styles.item_r}>
-                            <Text style={styles.item_r_title}>心理公开课</Text>
-                            <Text
-                                numberOfLines={2}
-                                style={styles.item_r_content}
-                            >
-                                吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致
-                            </Text>
-
-                            <View style={styles.class_item_span}>
-                                <Icon
-                                    style={{color:"#5eae00"}}
-                                    name="map-marker"
-                                    size={10}
-                                />
-                                <Text
-                                    style={styles.class_item_span_content}
-                                >
-                                    1楼102
-                                </Text>
-                            </View>
-                            <View style={styles.class_item_span}>
-                                <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
-                                <Text
-                                    style={styles.class_item_span_content}
-                                >
-                                    2018-03-07  09:30
-                                </Text>
-                            </View>
-                        </View>
-
-                        </View>
-                    </TouchableOpacity>
-                        <Divider style={{height:3,backgroundColor:'#eeefef'}}/>
+                    <Divider style={{height:3}}/>
+                    {this.state.loading?this.state.openClass:<Text> 数据加载中</Text>}
                 </View>
-                <View >
                 <Text style={styles.title}>[ 今日课表 ]</Text>
-                <Divider style={{height:1}}/>
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('openClass',{ type: '公开课'})}
-                >
-                    <View style={styles.schedule_item}>
-                        <View style={styles.schedule_item_title}>
-                            <Text style={styles.title_l}>
-                                语文
-                            </Text>
-                            <Text style={styles.title_r}>
-                                课程内容
-                            </Text>
-                        </View>
-                        <View style={styles.schedule_item_container}>
-                            <Text
-                                style={styles.schedule_item_content}
-                                numberOfLines={3}
-                            >
-                                {'        '}吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致
-                            </Text>
-                            <View style={styles.icon_container}>
-                                <View style={styles.class_item_span}>
-                                    <Icon name="map-marker" size={10} style={{color:"#5eae00"}}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        1楼102
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        2018-03-07  09:30
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-            </View>
                 <Divider style={{height:3}}/>
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('openClass',{ type: '公开课'})}
-                >
-                    <View style={styles.schedule_item}>
-                        <View style={styles.schedule_item_title}>
-                            <Text style={styles.title_l}>
-                                语文
-                            </Text>
-                            <Text style={styles.title_r}>
-                                课程内容
-                            </Text>
-                        </View>
-                        <View style={styles.schedule_item_container}>
-                            <Text
-                                style={styles.schedule_item_content}
-                                numberOfLines={3}
-                            >
-                                {'        '}吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致
-                            </Text>
-                            <View style={styles.icon_container}>
-                                <View style={styles.class_item_span}>
-                                    <Icon name="map-marker" size={10} style={{color:"#5eae00"}}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        1楼102
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        2018-03-07  09:30
-                                    </Text>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-
-
-
+                    {this.state.loading?this.state.todayClass:<Text> 数据加载中</Text>}
             </ScrollView>
         );
     }
@@ -250,7 +242,7 @@ const styles= StyleSheet.create({
     class_item_span:{
         flexDirection:'row',
         marginRight:10,
-        marginTop:2
+        marginTop:3
     },
     class_item_span_content:{
         fontSize:8,

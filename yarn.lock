@@ -3721,11 +3721,32 @@ react-native-loading-spinner-overlay@^0.5.2:
   version "0.5.2"
   resolved "http://registry.npm.taobao.org/react-native-loading-spinner-overlay/download/react-native-loading-spinner-overlay-0.5.2.tgz#b7bcd277476d596615fd7feee601789f9bdc7acc"
 
+react-native-md5@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/react-native-md5/download/react-native-md5-1.0.0.tgz#2320be24d674938ae5ef4f492698edbbfa0e0205"
+
+react-native-root-siblings@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/react-native-root-siblings/download/react-native-root-siblings-3.0.0.tgz#049f584f83ec5c18f16c5cfe1ef9aada26f685bf"
+  dependencies:
+    static-container "^1.0.0"
+
+react-native-root-toast@^3.0.1:
+  version "3.0.1"
+  resolved "http://registry.npm.taobao.org/react-native-root-toast/download/react-native-root-toast-3.0.1.tgz#ad0a37c46bc72971a229c7784df25147004e5538"
+  dependencies:
+    prop-types "^15.5.10"
+    react-native-root-siblings "^3.0.0"
+
 react-native-safe-area-view@^0.7.0:
   version "0.7.0"
   resolved "http://registry.npm.taobao.org/react-native-safe-area-view/download/react-native-safe-area-view-0.7.0.tgz#38f5ab9368d6ef9e5d18ab64212938af3ec39421"
   dependencies:
     hoist-non-react-statics "^2.3.1"
+
+react-native-smscode-count-down@^0.1.14:
+  version "0.1.14"
+  resolved "http://registry.npm.taobao.org/react-native-smscode-count-down/download/react-native-smscode-count-down-0.1.14.tgz#e71cc0fb17b5e10fda0922fdf68c048ea791d493"
 
 react-native-star-rating@^1.0.9:
   version "1.0.9"
@@ -3734,6 +3755,10 @@ react-native-star-rating@^1.0.9:
     prop-types "^15.5.10"
     react-native-button "^2.3.0"
     react-native-vector-icons "^4.5.0"
+
+react-native-storage@^0.2.2:
+  version "0.2.2"
+  resolved "http://registry.npm.taobao.org/react-native-storage/download/react-native-storage-0.2.2.tgz#4449197f122b2da0650e3704e1f050260ed58d9f"
 
 react-native-swiper@^1.5.13:
   version "1.5.13"
@@ -4348,6 +4373,10 @@ stack-utils@^1.0.1:
 stacktrace-parser@^0.1.3:
   version "0.1.4"
   resolved "http://registry.npm.taobao.org/stacktrace-parser/download/stacktrace-parser-0.1.4.tgz#01397922e5f62ecf30845522c95c4fe1d25e7d4e"
+
+static-container@^1.0.0:
+  version "1.2.0"
+  resolved "http://registry.npm.taobao.org/static-container/download/static-container-1.2.0.tgz#1c6e92b869da47d32abe47f45f50bf39661d9c2f"
 
 statuses@1:
   version "1.4.0"

@@ -9,6 +9,7 @@ import setting from './screens/setting';
 import index from './screens/i';
 import Schedule from './screens/Schedule';
 import classRate from './component/index/classRate'
-import img from './component/imagePick'
+import CountDownBTN from './component/CountDownBTN'
 
-AppRegistry.registerComponent('edupro', () => img);
+
+AppRegistry.registerComponent('edupro', () => App);
