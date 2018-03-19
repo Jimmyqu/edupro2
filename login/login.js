@@ -12,11 +12,10 @@ import {FormInput,Button} from 'react-native-elements'
 import {toastShort} from '../component/toast';
 import md5 from "react-native-md5";
 import {NavigationActions} from 'react-navigation';
-import { AsyncStorage } from 'react-native';
 import Global from '../component/common/Global'
 
 
-
+const loginUrl =utils.url+'WenDuEducation/api/index/login';
 const resetActions = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({routeName: 'Home',params:{ userId: 'bar' }})]
@@ -34,30 +33,24 @@ export default class login extends Component {
 
     }
 
-    // 格式话账号密码
-    // toQueryString(obj) {
-    //     return obj ? Object.keys(obj).sort().map(function (key) {
-    //         let val = obj[key];
-    //         if (Array.isArray(val)) {
-    //             return val.sort().map(function (val2) {
-    //                 return encodeURIComponent(key) + '=' + encodeURIComponent(val2);
-    //             }).join('&');
-    //         }
-    //
-    //         return encodeURIComponent(key) + '=' + encodeURIComponent(val);
-    //     }).join('&') : '';
-    // }
-
     // 请求处理
     handleRe(data){
         if(data.code==1){
             toastShort('账号或密码错误');
         }
         if(data.code==0){
-            toastShort('登录成功');
-            //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
-            Global.userId=data.data.id
-            this.props.navigation.dispatch(resetActions)
+            console.log(data.data.mobile)
+            if(data.data.mobile){
+                toastShort('登录成功');
+                //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
+                Global.userId=data.data.id
+                this.props.navigation.dispatch(resetActions)
+            }else {
+                toastShort('请先绑定手机号');
+                Global.userId=data.data.id
+                return false
+            }
+
         }
     }
 
@@ -68,7 +61,7 @@ export default class login extends Component {
             password:md5.hex_md5(this.state.pass).toUpperCase()
         };
         utils.post(
-            'http://192.168.0.89:8089/WenDuEducation/api/index/login',
+            loginUrl,
             utils.toQueryString(data),
             this.handleRe.bind(this)  //传递this 给内部函数
         )
@@ -95,7 +88,7 @@ export default class login extends Component {
                         underlineColorAndroid='transparent'
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='手机号码'
+                        placeholder='学号登陆'
                         onChangeText={(user)=>this.setState({user})}
                     />
                     <FormInput
@@ -126,7 +119,7 @@ export default class login extends Component {
                     <Text style={styles.text}
                           onPress={() => this.props.navigation.navigate('Reg')}
                     >
-                        点击注册
+                        绑定手机
                     </Text>
 
                 </View>

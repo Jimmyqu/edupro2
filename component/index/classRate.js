@@ -12,20 +12,22 @@ import {
 import {Button,List, ListItem, Icon} from 'react-native-elements'
 import utils from '../common/utils'
 import StarRating from 'react-native-star-rating';
+import {toastShort} from '../toast';
+import Global from "../common/Global";
 
 const width = utils.size.width;
-const my=[
-    {
-        name: 'Jimmy',
-        avatar_url: 'http://imgs.aixifan.com/cms/2018_02_22/1519293027325.png?imageView2/1/w/520/h/256',
-        subtitle: '15123456789'
-    },
-];
+const rateUrl=utils.url+'WenDuEducation/api/course/courseEvaluate';
+
 export default class HomeScreen extends React.Component {
+    static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params.type}`
+    });
+
     constructor(props) {
         super(props);
         this.state = {
-            starCount: 3
+            starCount: 3,
+            classRate:''
         };
     }
 
@@ -35,6 +37,40 @@ export default class HomeScreen extends React.Component {
         });
     }
 
+    _submitCallback(data){
+        if(data.code===1){
+            if(data.msg==='error_016'){
+                toastShort('课程已评价');
+            }
+            if(data.msg==='error_014'){
+                toastShort('未报名该课程');
+            }
+
+        }
+        if(data.code===0){
+            toastShort('评价成功');
+
+        }
+
+        this.setState({
+            starCount: 3,
+            classRate:''
+        });
+    }
+
+    _submitBtn(){
+        const data={
+            userId:1,
+            courseId:1,
+            content:this.state.classRate,
+            score:this.state.starCount
+        };
+        utils.post(
+            rateUrl,
+            utils.toQueryString(data),
+            this._submitCallback.bind(this)
+        )
+    }
     render() {
         return (
             <ScrollView style={{paddingBottom:20}}>
@@ -57,7 +93,6 @@ export default class HomeScreen extends React.Component {
                             fullStarColor={'#e60012'}
                             disabled={false}
                             maxStars={5}
-
                             starStyle={{marginLeft:10}}
                             rating={this.state.starCount}
                             selectedStar={(rating) => this.onStarRatingPress(rating)}
@@ -67,13 +102,13 @@ export default class HomeScreen extends React.Component {
                 <View style={styles.math_detail}>
                     <Text style={{paddingLeft:15,fontSize:18}}>评价内容</Text>
                     <TextInput
+                        onChangeText={(classRate)=>this.setState({classRate})}
                         placeholder='请输入评价'
                         underlineColorAndroid='transparent'
                         multiline = {true}
                         numberOfLines = {4}
                         style={{lineHeight:30, paddingLeft:15,}}>
                     </TextInput>
-
                 </View>
                 <Button
                     small
@@ -81,6 +116,7 @@ export default class HomeScreen extends React.Component {
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf',height:40}}
                     title='提交'
+                    onPress={()=>this._submitBtn()}
 
                 />
             </ScrollView>

@@ -31,7 +31,7 @@ export default class math extends React.Component {
         this.state={
             data:null,
             loading:false,
-            isSign:false
+            isJoin:false
         }
     }
 
@@ -39,8 +39,14 @@ export default class math extends React.Component {
         this.setState({
             data:data,
             loading:true,
-            isSign:data.data.isSign
+            isJoin:data.data.isJoin
         });
+
+    }
+
+    _getClassCallback(data){
+        console.log(data)
+        //支付to do
     }
 
     _getClass(){
@@ -48,14 +54,15 @@ export default class math extends React.Component {
         const option={
             userId:userId,
             courseId:courseId,
-
-        }
+            payType:0
+        };
         utils.post(
-            teacherUrl,
+            courseSign,
             utils.toQueryString(option),
-            this._teacherInfo.bind(this)
+            this._getClassCallback.bind(this)
         );
     }
+
     componentDidMount() {
         const { courseId,userId } = this.props.navigation.state.params;
         const option={
@@ -73,7 +80,7 @@ export default class math extends React.Component {
     render() {
         // console.log(this.state.data.data.teacher)
         const type=this.props.navigation.state.params.type==='公开课'; //判断页面
-        const my = [this.state.loading?this.state.data.data.teacher:[]]; //
+        const my = [this.state.loading?this.state.data.data.teacher:[]];
         return (
             <ScrollView style={{paddingBottom:20}}>
                 { /* other code from before here */ }
@@ -128,13 +135,13 @@ export default class math extends React.Component {
                     :null}
 
                 {type?<Button
-                    disabled={this.state.isSign===0?false:true}
+                    disabled={this.state.isJoin!==0}
                     small
                     containerViewStyle={{marginTop:10,height:30}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf',height:30}}
-                    title={this.state.isSign===0?'点击报名':'已报名'}
-                    // onPress={}
+                    title={this.state.isJoin===0?'点击报名':'已报名'}
+                    onPress={()=>this._getClass()}
                 />:null}
 
             </ScrollView>

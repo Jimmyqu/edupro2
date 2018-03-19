@@ -33,7 +33,6 @@ const Util = {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: data
-
         };
         fetch(url,fetchOptions)
             .then((response) => {
@@ -41,7 +40,11 @@ const Util = {
             })
             .then((responseData) => {
                 callback(responseData);
-            });
+            })
+            .catch(function(err) {
+                console.log(err)
+                alert('网络连接失败')
+        });
     },
 
 
@@ -52,7 +55,9 @@ const Util = {
             })
             .then((responseData) => {
                 callback(responseData);
-            });
+            }).catch(function(err) {
+                alert('网络连接失败')
+        })
     }
 };
 

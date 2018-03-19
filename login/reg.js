@@ -12,16 +12,26 @@ import {
 
 import utils from '../component/common/utils'
 import {  FormInput,Button } from 'react-native-elements'
+import CountDown from 'react-native-smscode-count-down'
+import md5 from "react-native-md5";
+import {toastShort} from '../component/toast'
 
+
+const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: '注册',
+        title: '绑定手机',
     });
     constructor(porps) {
         super(porps);
         this.state = {
-
+            mobile:'',
+            sms:'',
         }
+    }
+
+    _submitBtn(){
+
     }
 
     render() {
@@ -41,6 +51,7 @@ export default class reg extends Component {
                 </View>
                 <View style={styles.fromContainer}>
                     <FormInput
+                        onChangeText={(mobile)=>this.setState({mobile})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
@@ -48,42 +59,66 @@ export default class reg extends Component {
 
                     />
                     <FormInput
+                        onChangeText={(sms)=>this.setState({sms})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
                         placeholder='验证码'
                     />
-                    <FormInput
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='密码'
+                    {/*<Button*/}
+                        {/*small*/}
+                        {/*containerViewStyle={{position:'absolute',top:45,right:10,width:100,height:30}}*/}
+                        {/*// icon={{name: 'envira', type: 'font-awesome'}}*/}
+                        {/*buttonStyle={{borderRadius:5,backgroundColor:'#eeefef',height:30}}*/}
+                        {/*title='发送验证码'*/}
+                        {/*textStyle={{fontSize:12}}*/}
+                        {/*color={'#000'}*/}
+                        {/*onPress={()=>alert('success')}*/}
+                    {/*/>*/}
+                    <View style={{position:'absolute',top:45,right:10,}}>
+                        <CountDown
+                            style={{
+                                backgroundColor:'#336699',
+                                width:70,height:30,
 
-                    />
-                    <FormInput
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='确认密码'
-                    />
-                    <Button
-                        small
-                        containerViewStyle={{position:'absolute',top:45,right:10,width:100,height:30}}
-                        // icon={{name: 'envira', type: 'font-awesome'}}
-                        buttonStyle={{borderRadius:5,backgroundColor:'#eeefef',height:30}}
-                        title='发送验证码'
-                        textStyle={{fontSize:12}}
-                        color={'#000'}
-                        onPress={()=>alert('success')}
-                    />
+                            }}
+                            textStyle={{color: 'black',fontSize:10}}
+                            enable={true}  //是否可用  判断电话
+                            timerCount={10}
+                            timerTitle={'获取验证码'}
+                            disableColor={'gray'}
+                            onClick={(shouldStartCounting)=>{
+                                if(this.state.mobile.length===11){
+                                    shouldStartCounting(true);
+                                    const data={
+                                        mobile:this.state.mobile
+                                    };
+                                    utils.post(
+                                        smsUrl,
+                                        utils.toQueryString(data),
+                                        ()=>{
+                                            console.log(this.state.mobile)
+                                        }
+                                    );
+                                }else {
+                                    toastShort('请输入正确的手机号')
+                                    shouldStartCounting(false)
+                                }
+
+                            }}
+                        />
+                    </View>
+
+
+
                 </View>
                 <Button
                     small
                     containerViewStyle={{marginTop:10,height:45}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf'}}
-                    title='下一步'
-                    onPress={() => this.props.navigation.navigate('RegDetail')}
+                    title='确认绑定'
+
                 />
 
             </ScrollView>

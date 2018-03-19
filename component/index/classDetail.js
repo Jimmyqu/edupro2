@@ -37,7 +37,6 @@ export default class HomeScreen extends React.Component {
             data:data,
             loading:true
         });
-        console.log(data)
     }
 
     componentDidMount() {
@@ -47,8 +46,8 @@ export default class HomeScreen extends React.Component {
         }
             utils.post(
                 teacherUrl,
-            utils.toQueryString(option),
-            this._teacherInfo.bind(this)
+                utils.toQueryString(option),
+                this._teacherInfo.bind(this)
         );
 
     }
@@ -60,7 +59,7 @@ export default class HomeScreen extends React.Component {
                 subtitle:this.state.data.data.place
             }
         ]:[];
-        console.log(my)
+
         return (
             <ScrollView style={{paddingBottom:20}}>
                 { /* other code from before here */ }
@@ -90,7 +89,7 @@ export default class HomeScreen extends React.Component {
                                         iconSet={'FontAwesome'}
                                         emptyStar={'star-o'}
                                         fullStarColor={'#e60012'}
-                                        disabled={false}
+                                        disabled={true}
                                         maxStars={5}
                                         rating={this.state.data.data.score}
                                         starStyle={{marginLeft:5}}

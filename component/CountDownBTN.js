@@ -9,9 +9,9 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import CountDownButton from 'react-native-smscode-count-down'
+import CountDown from 'react-native-smscode-count-down'
 
-class imagePick extends React.Component {
+export default class CountDownButton extends React.Component {
     constructor(props){
         super(props);
         this.state = {
@@ -25,8 +25,8 @@ class imagePick extends React.Component {
         return (
             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                 <CountDownButton
-                    style={{width: 110,marginRight: 10,backgroundColor:'#336699'}}
-                    textStyle={{color: 'black'}}
+                    style={{width: 80,marginRight: 10,backgroundColor:'#336699'}}
+                    textStyle={{color: 'red'}}
                     enable={true}  //是否可用  判断电话
                     timerCount={10}
                     timerTitle={'获取验证码'}
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default imagePick;
+

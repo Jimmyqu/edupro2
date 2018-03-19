@@ -12,6 +12,10 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 export default class HomeScreen extends React.Component {
+    static navigationOptions = ({ navigation }) => ({
+        title: '公开课程',
+    });
+
     render() {
         return (
             <View >

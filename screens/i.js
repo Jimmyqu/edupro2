@@ -11,13 +11,15 @@ import {
     BackHandler,
     ToastAndroid,
 } from 'react-native';
+
 import AdSwiper from '../component/AdSwpier'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import {Divider ,List, ListItem} from 'react-native-elements'
 import openClass from "../component/index/openclass";
-import { AsyncStorage } from 'react-native';
 import utils from '../component/common/utils'
 import Global from '../component/common/Global'
+import ViewLoading from '../component/ViewLoading'
+
 const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList'
 const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList'
 export default class App extends Component{
@@ -55,7 +57,7 @@ export default class App extends Component{
                                     {data.data[i].description}
                                 </Text>
 
-                                <View style={styles.class_item_span}>
+                                <View style={[styles.class_item_span,{marginTop:5}]}>
                                     <Icon
                                         style={{color:"#5eae00"}}
                                         name="map-marker"
@@ -89,7 +91,6 @@ export default class App extends Component{
     }
 
     _todayClass(data){
-        console.log(data)
         const arr=[];
         for (let i in data.data){
             arr.push(
@@ -150,8 +151,7 @@ export default class App extends Component{
         });
     }
     componentDidMount(){
-        //AsyncStorage.getItem('id').then((val) => {
-            const data={
+        const data={
                 userId:Global.userId
             };
             utils.post(
@@ -164,23 +164,25 @@ export default class App extends Component{
                 utils.toQueryString(data),
                 this._todayClass.bind(this)
             )
-        //})
+
     }
 
-    //
-    // componentWillUnmount(){
-    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-    // }
-    //
-    // onBackAndroid = () => {
-    //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-    //         //最近2秒内按过back键，可以退出应用。
-    //         return false;
-    //     }
-    //     this.lastBackPressed = Date.now();
-    //     ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
-    //     return true;
-    // };
+    componentWillMount(){
+        BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+
+    componentWillUnmount(){
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+    onBackAndroid = () => {
+        if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+            //最近2秒内按过back键，可以退出应用。
+            return false;
+        }
+        this.lastBackPressed = Date.now();
+        ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+        return true;
+    };
 
 
     render() {
@@ -193,14 +195,17 @@ export default class App extends Component{
                 <AdSwiper
                     navigate={navigate}
                 />
-                <View style={styles.public_class}>
-                    <Text style={styles.title}>[ 公开课 ]</Text>
+                {this.state.loading?<View>
+                    <View style={styles.public_class}>
+                        <Text style={styles.title}>[ 公开课 ]</Text>
+                        <Divider style={{height:3}}/>
+                        {this.state.openClass}
+                    </View>
+                    <Text style={styles.title}>[ 今日课表 ]</Text>
                     <Divider style={{height:3}}/>
-                    {this.state.loading?this.state.openClass:<Text> 数据加载中</Text>}
-                </View>
-                <Text style={styles.title}>[ 今日课表 ]</Text>
-                <Divider style={{height:3}}/>
-                    {this.state.loading?this.state.todayClass:<Text> 数据加载中</Text>}
+                    {this.state.todayClass}
+                </View>:<ViewLoading/>}
+
             </ScrollView>
         );
     }

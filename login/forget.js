@@ -11,7 +11,13 @@ import {
 } from 'react-native';
 
 import utils from '../component/common/utils'
+import Global from '../component/common/Global'
 import {  FormInput,Button } from 'react-native-elements'
+import CountDown from 'react-native-smscode-count-down'
+import md5 from "react-native-md5";
+import {toastShort} from '../component/toast'
+
+const modifyPwdUrl=utils.url+'WenDuEducation/api/index/modifyPwd';
 
 export default class login extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -21,8 +27,41 @@ export default class login extends Component {
     constructor(porps) {
         super(porps);
         this.state = {
-
+            oldPassword:'',
+            newPassword:'',
+            renewPassword:''
         }
+    }
+
+    _submitBtn(){
+        console.log(this.state.oldPassword+"   "+this.state.newPassword)
+        if(this.state.oldPassword&&this.state.newPassword&&this.state.renewPassword){
+            if(this.state.renewPassword===this.state.newPassword&&this.state.newPassword.length>=6){
+                const data={
+                    userId:Global.userId,
+                    oldPassword:md5.hex_md5(this.state.oldPassword).toUpperCase(),
+                    newPassword:md5.hex_md5(this.state.newPassword).toUpperCase()
+                };
+                utils.post(
+                    modifyPwdUrl,
+                    utils.toQueryString(data),
+                    ()=>{
+                        toastShort('密码修改成功')
+                        this.setState({
+                            oldPassword:'',
+                            newPassword:'',
+                            renewPassword:''
+                        });
+                    }
+                )
+            }else {
+                toastShort('两次密码不一致')
+            }
+        }else {
+            toastShort('请输入正确密码')
+        }
+
+
     }
 
     render() {
@@ -42,50 +81,43 @@ export default class login extends Component {
                 </View>
                 <View style={styles.fromContainer}>
                     <FormInput
+                        secureTextEntry={true}
+                        value = {this.state.oldPassword}  //提交清空
+                        onChangeText={(oldPassword)=>this.setState({oldPassword})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='手机号码'
+                        placeholder='请输入旧密码'
+                    />
+                    <FormInput
+                        secureTextEntry={true}
+                        value = {this.state.newPassword}  //提交清空
+                        onChangeText={(newPassword)=>this.setState({newPassword})}
+                        underlineColorAndroid='transparent'
+                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        placeholder='请输入新密码'
 
                     />
                     <FormInput
+                        secureTextEntry={true}
+                        value = {this.state.renewPassword}  //提交清空
+                        onChangeText={(renewPassword)=>this.setState({renewPassword})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='验证码'
+                        placeholder='请确认新密码'
                     />
-                    <FormInput
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='修改密码'
 
-                    />
-                    <FormInput
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='再次输入密码'
-                    />
                     <Button
                         small
-                        containerViewStyle={{position:'absolute',top:45,right:10,width:100,height:30}}
+                        containerViewStyle={{marginTop:10,height:45}}
                         // icon={{name: 'envira', type: 'font-awesome'}}
-                        buttonStyle={{borderRadius:5,backgroundColor:'#eeefef',height:30}}
-                        title='发送验证码'
-                        textStyle={{fontSize:12}}
-                        color={'#000'}
+                        buttonStyle={{borderRadius:8,backgroundColor:'#008ccf'}}
+                        title='确认修改'
+                        onPress={()=>this._submitBtn()}
                     />
                 </View>
-                <Button
-                    small
-                    containerViewStyle={{marginTop:10,height:45}}
-                    // icon={{name: 'envira', type: 'font-awesome'}}
-                    buttonStyle={{borderRadius:8,backgroundColor:'#008ccf'}}
-                    title='确定'
-                    onPress={()=>alert('success')}
-                />
-
             </ScrollView>
         );
     }

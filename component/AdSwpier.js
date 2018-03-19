@@ -11,6 +11,7 @@ import {
 
 import utils from './common/utils'
 import Swiper from 'react-native-swiper'
+import ViewLoading from './ViewLoading'
 
 const width = utils.width;
 // const url='http://rap2api.taobao.org/app/mock/5504/GET//example/1517900324538'  //mock
@@ -81,7 +82,7 @@ export default class stars extends Component {
                         }}
                         loop>
                         {this.state.Img.map((val)=>val)}
-                    </Swiper>:<View><Text>not yet</Text></View>}
+                    </Swiper>:<ViewLoading/>}
                 </View>
 
 

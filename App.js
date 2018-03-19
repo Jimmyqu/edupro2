@@ -11,14 +11,11 @@ import {StackNavigator,TabNavigator} from 'react-navigation'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 //零散页面
-import screen1 from './component/index/screen1'
-import screen2 from './component/index/screen2'
-import screen3 from './component/index/screen3'
 
 import myclass from './component/index/myclass'
 import feedback from './component/index/feedback'
 import update from './component/index/update'
-import math from './component/index/math'
+import scheduleDetail from './component/index/scheduleDetail'
 import openClass from './component/index/openclass'
 import classDetail from './component/index/classDetail'
 import classRate from './component/index/classRate'
@@ -33,10 +30,9 @@ import setting from './screens/setting'
 import login from './login/login'
 import forget from './login/forget'
 import reg from './login/reg'
-import regDetail from './login/regDetail'
+
 
 import utils from './component/common/utils'
-const width=utils.size.width
 
 const TabMain = TabNavigator({
     首页: { screen: index,
@@ -78,6 +74,8 @@ const TabMain = TabNavigator({
 
 },{
     tabBarPosition:'bottom',
+    backBehavior: 'none',  //安卓禁止返回
+    swipeEnabled: false,  //ios 允许滑动
     tabBarOptions:{
         activeTintColor: 'red',  //文字激活颜色
         showIcon:true,
@@ -124,11 +122,6 @@ const HomeStack= StackNavigator({
         navigationOptions: {
         },
     },
-    RegDetail:{
-        screen:regDetail,
-        navigationOptions: {
-        },
-    },
     Home: {
         screen : TabMain ,
         navigationOptions: {
@@ -136,14 +129,11 @@ const HomeStack= StackNavigator({
         },
     },
     公告详情: { screen :adDetail},
-    screen1: { screen : screen1 },
-    screen2: { screen : screen2 },
-    screen3: { screen : screen3 },
     MyClass: { screen : myclass },
     Feedback: { screen : feedback },
     Update: { screen : update },
     classType:{
-        screen:math
+        screen:scheduleDetail
     },
     openClass:{
         screen:openClass

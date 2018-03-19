@@ -45,13 +45,15 @@ class CameraButton extends React.Component {
 
 
     render() {
-
         return (
             <TouchableOpacity
                 onPress={this.showImagePicker.bind(this)}
                 style={[this.props.style,styles.cameraBtn]}>
                 <View>
-                    <Icon name="md-camera" color="#aaa" size={34}/>
+                    <Icon
+                        name="md-camera"
+                        color="#336699"
+                        size={15}/>
                 </View>
             </TouchableOpacity>
         )
