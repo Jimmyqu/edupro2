@@ -5,13 +5,29 @@ import {
 } from 'react-native';
 
 
+
+const base_unit = 6;
+function em(value) {
+    return base_unit*PixelRatio.get()* value;
+}
+
 const Util = {
-    url:'http://192.168.0.89:8089/',
     ratio: PixelRatio.get(),  //像素密度
     pixel: 1 / PixelRatio.get(),  //最小像素
+    url:'http://192.168.0.89:8089/',
     size: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
+    },
+    style :{
+        FONT_SIZE: em(0.8),
+        FONT_SIZE_SMALLER: em(0.6),
+        FONT_SIZE_SMALL: em(0.7),
+        FONT_SIZE_TITLE: em(1),
+
+    },
+    em(value) {
+        return base_unit*PixelRatio.get()* value;
     },
     toQueryString(obj) {
         return obj ? Object.keys(obj).sort().map(function (key) {
@@ -46,8 +62,6 @@ const Util = {
                 alert('网络连接失败')
         });
     },
-
-
     get(url,callback){
         fetch(url)
             .then((response) => {

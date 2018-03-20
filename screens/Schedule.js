@@ -76,12 +76,12 @@ export default class App extends Component {
                 onPress={val.title===''?null:() => this._itemRender(val)}
             >
                 <View >
-                    <Text style={{textAlign:'center',justifyContent:'center',fontSize:12}}>{val.title}</Text>
+                    <Text style={{textAlign:'center',justifyContent:'center',fontSize:utils.style.FONT_SIZE_SMALL}}>{val.title}</Text>
                 </View>
             </TouchableOpacity>
         );
 
-        const month=new Date().getMonth()+1
+        const month=new Date().getMonth()+1;
         const tableHead = [month+'月', '星期一', '星期二', '星期三','星期四', '星期五'];
         const tableTitle = ['第一节', '第二节','第三节', '第四节'];
         const AMtableData = this.state.loading?this.state.data.slice(0,4).map(x=>x.map(y=>ele(y))):[];

@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
     View,
     Image,
     ScrollView,
     TouchableOpacity,
-    FlatList,
     BackHandler,
     ToastAndroid,
+    DeviceEventEmitter,
+    NativeAppEventEmitter,
+    Platform
 } from 'react-native';
 
 import AdSwiper from '../component/AdSwpier'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import {Divider ,List, ListItem} from 'react-native-elements'
+import {Divider} from 'react-native-elements'
 import openClass from "../component/index/openclass";
 import utils from '../component/common/utils'
 import Global from '../component/common/Global'
 import ViewLoading from '../component/ViewLoading'
+import BackgroundTimer from 'react-native-background-timer';
 
-const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList'
-const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList'
+
+const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList';
+const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList';
+
+
 export default class App extends Component{
     constructor(props) {
         super(props);
@@ -61,7 +66,7 @@ export default class App extends Component{
                                     <Icon
                                         style={{color:"#5eae00"}}
                                         name="map-marker"
-                                        size={10}
+                                        size={15}
                                     />
                                     <Text
                                         style={styles.class_item_span_content}
@@ -70,7 +75,7 @@ export default class App extends Component{
                                     </Text>
                                 </View>
                                 <View style={styles.class_item_span}>
-                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={10}/>
+                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={15}/>
                                     <Text
                                         style={styles.class_item_span_content}
                                     >
@@ -84,10 +89,35 @@ export default class App extends Component{
                 </View>
             )
         }
-        this.setState({
-            openClass:arr,
-            loading:true
-        });
+        if(arr.length===0){
+            arr.push(<View key={1} >
+                <TouchableOpacity>
+                    <View style={styles.class_item}>
+                        <Image
+                            resizeMode="cover"
+                            blurRadius={1}
+                            style={{width:80,height:70,}}
+                            source={require('../static/img/1.jpg')}
+                            // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
+                        />
+                        <View style={styles.item_r}>
+                            <Text style={styles.item_r_title}>暂无课程</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <Divider style={{height:3}}/>
+            </View>)
+            this.setState({
+                openClass:arr,
+                loading:true
+            });
+        }else {
+            this.setState({
+                openClass:arr,
+                loading:true
+            });
+        }
+
     }
 
     _todayClass(data){
@@ -121,7 +151,7 @@ export default class App extends Component{
                                 </Text>
                                 <View style={styles.icon_container}>
                                     <View style={styles.class_item_span}>
-                                        <Icon name="map-marker" size={10} style={{color:"#5eae00"}}/>
+                                        <Icon name="map-marker" size={15} style={{color:"#5eae00"}}/>
                                         <Text
                                             style={styles.class_item_span_content}
                                         >
@@ -129,7 +159,7 @@ export default class App extends Component{
                                         </Text>
                                     </View>
                                     <View style={styles.class_item_span}>
-                                        <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
+                                        <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
                                         <Text
                                             style={styles.class_item_span_content}
                                         >
@@ -145,12 +175,45 @@ export default class App extends Component{
             )
 
         }
-        this.setState({
-            todayClass:arr,
-            loading:true
-        });
+        if(arr.length===0){
+            arr.push(<View key={1} >
+                <TouchableOpacity>
+                    <View style={styles.class_item}>
+                        <Image
+                            resizeMode="cover"
+                            blurRadius={1}
+                            style={{width:80,height:70,}}
+                            source={require('../static/img/1.jpg')}
+                            // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
+                        />
+                        <View style={styles.item_r}>
+                            <Text style={styles.item_r_title}>暂无课程</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <Divider style={{height:3}}/>
+            </View>)
+            this.setState({
+                todayClass:arr,
+                loading:true
+            });
+        }else {
+            this.setState({
+                todayClass:arr,
+                loading:true
+            });
+        }
+
+
     }
+
     componentDidMount(){
+        // const intervalId = BackgroundTimer.setInterval(() => {
+        //     // this will be executed every 200 ms
+        //     // even when app is the the background
+        //     console.log('tic');
+        // }, 200);
+
         const data={
                 userId:Global.userId
             };
@@ -167,22 +230,26 @@ export default class App extends Component{
 
     }
 
-    componentWillMount(){
-        BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-
-    componentWillUnmount(){
-        BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-    }
-    onBackAndroid = () => {
-        if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-            //最近2秒内按过back键，可以退出应用。
-            return false;
-        }
-        this.lastBackPressed = Date.now();
-        ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
-        return true;
-    };
+    // componentWillMount(){
+    //     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    // }
+    //
+    // componentWillUnmount(){
+    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    // }
+    //
+    // onBackAndroid = () => {
+    //     // console.log(this.props.navigation.pop(1))
+    //     console.log(this.props.navigation)
+    //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+    //         //最近2秒内按过back键，可以退出应用。
+    //         return false;
+    //     }
+    //     this.lastBackPressed = Date.now();
+    //     ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+    //     return true;
+    //
+    // };
 
 
     render() {
@@ -221,7 +288,7 @@ const styles= StyleSheet.create({
     },
     title:{
         paddingLeft:15,
-        fontSize:18,
+        fontSize:utils.style.FONT_SIZE_TITLE,
         fontWeight:'bold',
         paddingTop:5,
         paddingBottom:5
@@ -238,11 +305,11 @@ const styles= StyleSheet.create({
         paddingLeft:15,
     },
     item_r_title:{
-        fontSize:15,
+        fontSize:utils.style.FONT_SIZE,
         fontWeight:'bold'
     },
     item_r_content:{
-        fontSize:12,
+        fontSize:utils.style.FONT_SIZE_SMALL,
     },
     class_item_span:{
         flexDirection:'row',
@@ -250,7 +317,7 @@ const styles= StyleSheet.create({
         marginTop:3
     },
     class_item_span_content:{
-        fontSize:8,
+        fontSize:utils.style.FONT_SIZE_SMALLER,
         marginLeft:5,
 
     },
@@ -273,7 +340,7 @@ const styles= StyleSheet.create({
         textAlign:'center',
         lineHeight:30,
         backgroundColor:'#0d8ccf',
-        fontSize:15,
+        fontSize:utils.style.FONT_SIZE_TITLE,
         borderRadius:5,
         height:30,
         marginRight:5
@@ -282,13 +349,13 @@ const styles= StyleSheet.create({
         flex:2,
         textAlign:'center',
         backgroundColor:'#cbcdcc',
-        fontSize:13,
+        fontSize:utils.style.FONT_SIZE_SMALL,
         borderRadius:5,
         height:30,
         lineHeight:30,
     },
     schedule_item_content:{
-        fontSize:12,
+        fontSize:utils.style.FONT_SIZE_SMALL,
         paddingRight:5,
         paddingLeft:5,
         paddingTop:10

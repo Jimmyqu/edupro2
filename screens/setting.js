@@ -210,7 +210,7 @@ export default class App extends Component {
                         <View style={{
                             flex:2,
                             justifyContent:'center'}}>
-                            <Text style={{fontSize:16}}>
+                            <Text style={{fontSize:utils.style.FONT_SIZE_TITLE}}>
                                 {this.state.data.data.name}
                             </Text>
                         </View>
@@ -230,10 +230,12 @@ export default class App extends Component {
                             InfoList.map((l, i) => (
                                 <ListItem
                                     rightTitle={l.subtitle}
+                                    rightTitleStyle={{fontSize:utils.style.FONT_SIZE_SMALL}}
                                     containerStyle={{height:35}}
                                     key={i}
                                     title={l.name}
                                     hideChevron={true}
+
                                 />
                             ))
                         }

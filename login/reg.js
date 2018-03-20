@@ -15,9 +15,11 @@ import {  FormInput,Button } from 'react-native-elements'
 import CountDown from 'react-native-smscode-count-down'
 import md5 from "react-native-md5";
 import {toastShort} from '../component/toast'
+import Global from '../component/common/Global'
 
 
 const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
+const bindUrl=utils.url+'WenDuEducation/api/index/bindMobile'
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: '绑定手机',
@@ -27,14 +29,34 @@ export default class reg extends Component {
         this.state = {
             mobile:'',
             sms:'',
+
         }
     }
 
     _submitBtn(){
-
+        const data={
+            userId:Global.userId,
+            mobile:this.state.mobile,
+            code:this.state.sms
+        };
+        console.log(data)
+        utils.post(
+            bindUrl,
+            utils.toQueryString(data),
+            ()=>{
+                if(data.code==1){
+                    toastShort('绑定失败');
+                }
+                if(data.code==0){
+                    toastShort('绑定成功');
+                }
+            }
+        );
     }
 
     render() {
+        const number = this.props.navigation.state.params.number
+
         return (
             <ScrollView >
                 <View style={styles.container}>
@@ -54,7 +76,7 @@ export default class reg extends Component {
                         onChangeText={(mobile)=>this.setState({mobile})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='手机号码'
 
                     />
@@ -62,19 +84,9 @@ export default class reg extends Component {
                         onChangeText={(sms)=>this.setState({sms})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='验证码'
                     />
-                    {/*<Button*/}
-                        {/*small*/}
-                        {/*containerViewStyle={{position:'absolute',top:45,right:10,width:100,height:30}}*/}
-                        {/*// icon={{name: 'envira', type: 'font-awesome'}}*/}
-                        {/*buttonStyle={{borderRadius:5,backgroundColor:'#eeefef',height:30}}*/}
-                        {/*title='发送验证码'*/}
-                        {/*textStyle={{fontSize:12}}*/}
-                        {/*color={'#000'}*/}
-                        {/*onPress={()=>alert('success')}*/}
-                    {/*/>*/}
                     <View style={{position:'absolute',top:45,right:10,}}>
                         <CountDown
                             style={{
@@ -118,7 +130,7 @@ export default class reg extends Component {
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf'}}
                     title='确认绑定'
-
+                    onPress={()=>this._submitBtn()}
                 />
 
             </ScrollView>

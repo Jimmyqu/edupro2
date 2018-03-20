@@ -94,7 +94,7 @@ export default class HomeScreen extends React.Component {
                                         rating={this.state.data.data.score}
                                         starStyle={{marginLeft:5}}
                                     />
-                                    <Text style={{fontSize:10,marginLeft:10}}>{this.state.data.data.score}分</Text>
+                                    <Text style={{fontSize:utils.style.FONT_SIZE_SMALLER,marginLeft:10}}>{this.state.data.data.score}分</Text>
                                 </View>
 
                             </List>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     title:{
         paddingLeft:15,
-        fontSize:18,
+        fontSize:utils.style.FONT_SIZE_TITLE,
         fontWeight:'bold',
         paddingTop:5,
         paddingBottom:5

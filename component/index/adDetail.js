@@ -47,13 +47,13 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
     news_title:{
         marginTop:20,
-        fontSize:30,
+        fontSize:utils.style.FONT_SIZE_TITLE,
         fontWeight:'bold',
         textAlign:'center',
         color:'#000'
     },
     news_time:{
-        fontSize:12,
+        fontSize:utils.style.FONT_SIZE_SMALLER,
         textAlign:'center',
         color:'#c9c9ca'
     },
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         paddingBottom:50
     },
     news_detail:{
-        fontSize:14,
+        fontSize:utils.style.FONT_SIZE,
         textAlign:'center',
         color:'#000'
     }

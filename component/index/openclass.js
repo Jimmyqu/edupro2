@@ -99,7 +99,7 @@ export default class math extends React.Component {
                                         avatarContainerStyle={{height:50,width:50,borderRadius:50}}
                                         avatar={{uri:l.profilePhoto}}
                                         subtitle={l.place }
-                                        rightTitleStyle={{fontSize:12}}
+                                        rightTitleStyle={{fontSize:utils.style.FONT_SIZE}}
                                         containerStyle={{justifyContent:'center'}}
                                         key={i}
                                         title={l.name}
@@ -112,9 +112,17 @@ export default class math extends React.Component {
                         </List>
                         <View style={styles.math_detail}>
                             <Text>{'       '}{this.state.data.data.description}</Text>
+                            <View style={styles.class_item_money}>
+                                <Icon name="rmb" size={15} style={{color:"#336699"}}/>
+                                <Text
+                                    style={styles.class_item_span_content}
+                                >
+                                    {this.state.data.data.money}元
+                                </Text>
+                            </View>
                             <View style={styles.icon_container}>
                                 <View style={styles.class_item_span}>
-                                    <Icon name="map-marker" size={10} style={{color:"#5eae00"}}/>
+                                    <Icon name="map-marker" size={15} style={{color:"#5eae00"}}/>
                                     <Text
                                         style={styles.class_item_span_content}
                                     >
@@ -122,7 +130,7 @@ export default class math extends React.Component {
                                     </Text>
                                 </View>
                                 <View style={styles.class_item_span}>
-                                    <Icon name="clock-o" size={10} style={{color:"#5eae00"}}/>
+                                    <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
                                     <Text
                                         style={styles.class_item_span_content}
                                     >
@@ -159,7 +167,7 @@ const styles = StyleSheet.create({
         marginLeft:width*0.05,
         backgroundColor:'#fff',
         marginTop:10,
-        paddingTop:15,
+        paddingTop:30,
         paddingLeft:15,
         paddingRight:15,
 
@@ -176,7 +184,13 @@ const styles = StyleSheet.create({
         marginTop:2
     },
     class_item_span_content:{
-        fontSize:8,
+        fontSize:utils.style.FONT_SIZE_SMALLER,
         marginLeft:5,
     },
+    class_item_money:{
+        position:'absolute',
+        flexDirection:'row',
+        left:10,
+        marginTop:5
+    }
 });

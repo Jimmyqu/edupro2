@@ -86,7 +86,7 @@ export default class login extends Component {
                         onChangeText={(oldPassword)=>this.setState({oldPassword})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='请输入旧密码'
                     />
                     <FormInput
@@ -95,7 +95,7 @@ export default class login extends Component {
                         onChangeText={(newPassword)=>this.setState({newPassword})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='请输入新密码'
 
                     />
@@ -105,7 +105,7 @@ export default class login extends Component {
                         onChangeText={(renewPassword)=>this.setState({renewPassword})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='请确认新密码'
                     />
 

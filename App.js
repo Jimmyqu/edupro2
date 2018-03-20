@@ -31,9 +31,6 @@ import login from './login/login'
 import forget from './login/forget'
 import reg from './login/reg'
 
-
-import utils from './component/common/utils'
-
 const TabMain = TabNavigator({
     首页: { screen: index,
         navigationOptions: ({navigation}) => ({
@@ -75,7 +72,7 @@ const TabMain = TabNavigator({
 },{
     tabBarPosition:'bottom',
     backBehavior: 'none',  //安卓禁止返回
-    swipeEnabled: false,  //ios 允许滑动
+    //swipeEnabled: false,  //ios 允许滑动
     tabBarOptions:{
         activeTintColor: 'red',  //文字激活颜色
         showIcon:true,

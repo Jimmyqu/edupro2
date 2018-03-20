@@ -13,7 +13,7 @@ import {toastShort} from '../component/toast';
 import md5 from "react-native-md5";
 import {NavigationActions} from 'react-navigation';
 import Global from '../component/common/Global'
-
+import { ProgressDialog } from 'react-native-simple-dialogs';
 
 const loginUrl =utils.url+'WenDuEducation/api/index/login';
 const resetActions = NavigationActions.reset({
@@ -26,20 +26,31 @@ export default class login extends Component {
         this.state = {
             user:'15307104100',
             pass:'123456',
+            progressVisible:false
         }
     }
 
     componentDidMount(){
-
     }
 
     // 请求处理
     handleRe(data){
+
         if(data.code==1){
-            toastShort('账号或密码错误');
+            this.setState({
+                progressVisible:false
+            })
+            if(data.msg==="error_000"){
+                toastShort('服务器连接不上');
+            }
+            if(data.msg==="error_001"){
+                toastShort('账号或密码错误');
+            }
         }
         if(data.code==0){
-            console.log(data.data.mobile)
+            this.setState({
+                progressVisible:false
+            })
             if(data.data.mobile){
                 toastShort('登录成功');
                 //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
@@ -56,6 +67,9 @@ export default class login extends Component {
 
 
     _checkIn(){
+        this.setState({
+            progressVisible:true
+        })
         const data={
             account:this.state.user,
             password:md5.hex_md5(this.state.pass).toUpperCase()
@@ -70,6 +84,11 @@ export default class login extends Component {
     render() {
         return (
             <ScrollView >
+                <ProgressDialog
+                    visible={this.state.progressVisible}
+                    title=""
+                    message="正在登陆"
+                />
                 <View style={styles.container}>
                     <Image
                         resizeMode={'contain'}
@@ -87,15 +106,15 @@ export default class login extends Component {
                     <FormInput
                         underlineColorAndroid='transparent'
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
-                        placeholder='学号登陆'
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
+                        placeholder='学号或手机号登陆'
                         onChangeText={(user)=>this.setState({user})}
                     />
                     <FormInput
                         underlineColorAndroid='transparent'
                         secureTextEntry={true}
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff"}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='密码'
                         onChangeText={(pass)=>this.setState({pass})}
                     />
@@ -108,7 +127,7 @@ export default class login extends Component {
                     buttonStyle={{borderRadius:8,backgroundColor:'#fabe00'}}
                     title='登陆'
                     //onPress={() =>this.props.navigation.dispatch(resetActions)}
-                    onPress={()=>this._checkIn(this)}
+                    onPress={()=>this._checkIn()}
                 />
                 <View style={styles.textContainer}>
                     <Text style={styles.text}
@@ -117,7 +136,9 @@ export default class login extends Component {
                         忘记密码？
                     </Text>
                     <Text style={styles.text}
-                          onPress={() => this.props.navigation.navigate('Reg')}
+                          onPress={() => this.props.navigation.navigate('Reg',{
+                              number:this.state.user
+                          })}
                     >
                         绑定手机
                     </Text>
@@ -149,7 +170,7 @@ const styles = StyleSheet.create({
         marginRight:15
     },
     text:{
-        fontSize:12,
+        fontSize:utils.style.FONT_SIZE_SMALL,
         color:'#231815'
     }
 });
