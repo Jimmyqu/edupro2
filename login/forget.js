@@ -21,7 +21,7 @@ const modifyPwdUrl=utils.url+'WenDuEducation/api/index/modifyPwd';
 
 export default class login extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: '忘记密码',
+        title: '修改密码',
     });
 
     constructor(porps) {

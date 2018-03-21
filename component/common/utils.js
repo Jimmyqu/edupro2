@@ -55,6 +55,7 @@ const Util = {
                 return response.json()
             })
             .then((responseData) => {
+                console.log(responseData)
                 callback(responseData);
             })
             .catch(function(err) {

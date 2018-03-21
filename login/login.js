@@ -35,7 +35,7 @@ export default class login extends Component {
 
     // 请求处理
     handleRe(data){
-
+        console.log(data)
         if(data.code==1){
             this.setState({
                 progressVisible:false
@@ -50,15 +50,15 @@ export default class login extends Component {
         if(data.code==0){
             this.setState({
                 progressVisible:false
-            })
+            });
             if(data.data.mobile){
                 toastShort('登录成功');
                 //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
-                Global.userId=data.data.id
+                Global.userId=data.data.id;
                 this.props.navigation.dispatch(resetActions)
             }else {
                 toastShort('请先绑定手机号');
-                Global.userId=data.data.id
+                Global.userId=data.data.id;
                 return false
             }
 
@@ -131,7 +131,7 @@ export default class login extends Component {
                 />
                 <View style={styles.textContainer}>
                     <Text style={styles.text}
-                          onPress={() => this.props.navigation.navigate('Forget')}
+                          onPress={() => this.props.navigation.navigate('Regpass')}
                     >
                         忘记密码？
                     </Text>

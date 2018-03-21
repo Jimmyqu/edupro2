@@ -30,6 +30,7 @@ import setting from './screens/setting'
 import login from './login/login'
 import forget from './login/forget'
 import reg from './login/reg'
+import regpass from './login/regpass'
 
 const TabMain = TabNavigator({
     首页: { screen: index,
@@ -111,6 +112,11 @@ const HomeStack= StackNavigator({
     },
     Forget: {
         screen:forget,
+        navigationOptions: {
+        },
+    },
+    Regpass:{
+        screen:regpass,
         navigationOptions: {
         },
     },

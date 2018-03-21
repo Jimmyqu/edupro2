@@ -174,88 +174,91 @@ export default class App extends Component {
         ];
 
         return (
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={{flex:1}}
-            >
-                {this.state.loading?<View >
-                    <View style={{
-                        flexDirection:'row',
-                        height:100,
-                        backgroundColor:'#fff',
-                        borderColor:'#bbbbbb',
-                        borderTopWidth:1.5,
-                        borderBottomWidth:1.5,
-                        borderRightWidth:0,
-                        borderLeftWidth:0,
-                        marginTop:10
-                    }}>
-                        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                            <Image
-                                source={{uri:this.state.iconLoading?
-                                        this.state.avatarSource:
-                                        this.state.data.data.profilePhoto}}
-                                style={{
-                                    width:60,
-                                    height:60,
-                                    borderRadius:60,
-                                    borderColor:'#336699',
-                                    borderWidth:3}}
-                            />
-                            <CameraButton
-                                style={{position:'absolute',top:55,left:50}}
-                                onFileUpload={this.onFileUpload.bind(this)}
-                            />
-                        </View>
+            <View style={{flex:1}}>
+                {this.state.loading?<ScrollView
+                    showsVerticalScrollIndicator={false}
+                    style={{flex:1}}
+                >
+                    <View >
                         <View style={{
-                            flex:2,
-                            justifyContent:'center'}}>
-                            <Text style={{fontSize:utils.style.FONT_SIZE_TITLE}}>
-                                {this.state.data.data.name}
-                            </Text>
-                        </View>
-                        <View style={{
-                            flex:2,
-                            justifyContent:'center',
-                            alignItems:'center'}}>
-                            <Text>
-                                {this.state.data.data.mobile}
-                            </Text>
+                            flexDirection:'row',
+                            height:100,
+                            backgroundColor:'#fff',
+                            borderColor:'#bbbbbb',
+                            borderTopWidth:1.5,
+                            borderBottomWidth:1.5,
+                            borderRightWidth:0,
+                            borderLeftWidth:0,
+                            marginTop:10
+                        }}>
+                            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                                <Image
+                                    source={{uri:this.state.iconLoading?
+                                            this.state.avatarSource:
+                                            this.state.data.data.profilePhoto}}
+                                    style={{
+                                        width:60,
+                                        height:60,
+                                        borderRadius:60,
+                                        borderColor:'#336699',
+                                        borderWidth:3}}
+                                />
+                                <CameraButton
+                                    style={{position:'absolute',top:55,left:50}}
+                                    onFileUpload={this.onFileUpload.bind(this)}
+                                />
+                            </View>
+                            <View style={{
+                                flex:2,
+                                justifyContent:'center'}}>
+                                <Text style={{fontSize:utils.style.FONT_SIZE_TITLE}}>
+                                    {this.state.data.data.name}
+                                </Text>
+                            </View>
+                            <View style={{
+                                flex:2,
+                                justifyContent:'center',
+                                alignItems:'center'}}>
+                                <Text>
+                                    {this.state.data.data.mobile}
+                                </Text>
+                            </View>
+
                         </View>
 
+                        <List containerStyle={{marginBottom: 0}}>
+                            {
+                                InfoList.map((l, i) => (
+                                    <ListItem
+                                        rightTitle={l.subtitle}
+                                        rightTitleStyle={{fontSize:utils.style.FONT_SIZE_SMALL}}
+                                        containerStyle={{height:35}}
+                                        key={i}
+                                        title={l.name}
+                                        hideChevron={true}
+
+                                    />
+                                ))
+                            }
+                        </List>
+
+                        <List containerStyle={{marginBottom: 20}}>
+                            {
+                                settingList.map((l, i) => (
+                                    <ListItem
+                                        containerStyle={{height:35}}
+                                        key={i}
+                                        title={l.name}
+                                        subtitle={l.subtitle}
+                                        onPress={() => this.props.navigation.navigate(l.to)}
+                                    />
+                                ))
+                            }
+                        </List>
                     </View>
+                </ScrollView>:<ViewLoading/>}
+            </View>
 
-                    <List containerStyle={{marginBottom: 0}}>
-                        {
-                            InfoList.map((l, i) => (
-                                <ListItem
-                                    rightTitle={l.subtitle}
-                                    rightTitleStyle={{fontSize:utils.style.FONT_SIZE_SMALL}}
-                                    containerStyle={{height:35}}
-                                    key={i}
-                                    title={l.name}
-                                    hideChevron={true}
-
-                                />
-                            ))
-                        }
-                    </List>
-
-                    <List containerStyle={{marginBottom: 20}}>
-                        {
-                            settingList.map((l, i) => (
-                                <ListItem
-                                    containerStyle={{height:35}}
-                                    key={i}
-                                    title={l.name}
-                                    subtitle={l.subtitle}
-                                    onPress={() => this.props.navigation.navigate(l.to)}
-                                />
-                            ))
-                        }
-                    </List>
-                </View>:<ViewLoading/>}
-            </ScrollView>
         );
     }
 }

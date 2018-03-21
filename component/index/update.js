@@ -39,7 +39,7 @@ export default class HomeScreen extends React.Component {
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{width:width*0.9,borderRadius:8,backgroundColor:'#008ccf',marginTop:100}}
                     title='检查更新'
-                    onPress={() =>toastShort('')}
+                    onPress={() =>toastShort('已是最新版本')}
                 />
             </View>
 

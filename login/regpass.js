@@ -22,7 +22,7 @@ const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
 const bindUrl=utils.url+'WenDuEducation/api/index/bindMobile'
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
-        title: '绑定手机',
+        title: '找回密码',
     });
     constructor(porps) {
         super(porps);
@@ -34,6 +34,7 @@ export default class reg extends Component {
     }
 
     _submitBtn(){
+        toastShort('已发送验证码')
         const data={
             userId:Global.userId,
             mobile:this.state.mobile,
@@ -55,8 +56,6 @@ export default class reg extends Component {
     }
 
     render() {
-        const number = this.props.navigation.state.params.number
-
         return (
             <ScrollView >
                 <View style={styles.container}>
@@ -120,7 +119,25 @@ export default class reg extends Component {
                             }}
                         />
                     </View>
+                    <FormInput
+                        secureTextEntry={true}
+                        value = {this.state.newPassword}  //提交清空
+                        onChangeText={(newPassword)=>this.setState({newPassword})}
+                        underlineColorAndroid='transparent'
+                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
+                        placeholder='请输入新密码'
 
+                    />
+                    <FormInput
+                        secureTextEntry={true}
+                        value = {this.state.renewPassword}  //提交清空
+                        onChangeText={(renewPassword)=>this.setState({renewPassword})}
+                        underlineColorAndroid='transparent'
+                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
+                        placeholder='请确认新密码'
+                    />
 
 
                 </View>
@@ -129,7 +146,7 @@ export default class reg extends Component {
                     containerViewStyle={{marginTop:10,height:45}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf'}}
-                    title='确认绑定'
+                    title='确认修改'
                     onPress={()=>this._submitBtn()}
                 />
 
