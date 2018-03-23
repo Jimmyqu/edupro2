@@ -4,7 +4,7 @@ import {
     Dimensions
 } from 'react-native';
 
-
+import {toastShort} from '../toast';
 
 const base_unit = 6;
 function em(value) {
@@ -14,7 +14,7 @@ function em(value) {
 const Util = {
     ratio: PixelRatio.get(),  //像素密度
     pixel: 1 / PixelRatio.get(),  //最小像素
-    url:'http://192.168.0.89:8089/',
+    url:'http://192.168.0.250:8089/',
     size: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
@@ -55,12 +55,10 @@ const Util = {
                 return response.json()
             })
             .then((responseData) => {
-                console.log(responseData)
                 callback(responseData);
             })
             .catch(function(err) {
-                console.log(err)
-                alert('网络连接失败')
+                toastShort('网络连接失败')
         });
     },
     get(url,callback){

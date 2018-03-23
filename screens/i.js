@@ -10,7 +10,8 @@ import {
     ToastAndroid,
     DeviceEventEmitter,
     NativeAppEventEmitter,
-    Platform
+    Platform,
+
 } from 'react-native';
 
 import AdSwiper from '../component/AdSwpier'
@@ -21,11 +22,11 @@ import utils from '../component/common/utils'
 import Global from '../component/common/Global'
 import ViewLoading from '../component/ViewLoading'
 import BackgroundTimer from 'react-native-background-timer';
-
+import Alipay from 'react-native-yunpeng-alipay';
+import { Geolocation }  from 'react-native-baidu-map'
 
 const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList';
 const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList';
-
 
 export default class App extends Component{
     constructor(props) {
@@ -208,6 +209,21 @@ export default class App extends Component{
     }
 
     componentDidMount(){
+        console.log(122)
+        Geolocation.getCurrentPosition()
+            .then(data => {
+                console.log(JSON.stringify(data));
+            })
+
+
+
+        // Alipay.pay("signed pay info string").then(function(data){
+        //     console.log(data);
+        // }, function (err) {
+        //     console.log(err);
+        // });
+
+
         // const intervalId = BackgroundTimer.setInterval(() => {
         //     // this will be executed every 200 ms
         //     // even when app is the the background
@@ -232,6 +248,7 @@ export default class App extends Component{
 
     // componentWillMount(){
     //     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    //
     // }
     //
     // componentWillUnmount(){
@@ -239,8 +256,8 @@ export default class App extends Component{
     // }
     //
     // onBackAndroid = () => {
-    //     // console.log(this.props.navigation.pop(1))
-    //     console.log(this.props.navigation)
+    //     const s = this.props.navigation;
+    //     console.log(s)
     //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
     //         //最近2秒内按过back键，可以退出应用。
     //         return false;

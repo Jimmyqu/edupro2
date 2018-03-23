@@ -13,6 +13,7 @@ import utils from "../component/common/utils";
 import Global from '../component/common/Global'
 import CameraButton from '../component/CameraButton'
 import ViewLoading from '../component/ViewLoading'
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 
 // const my=[
 //     {
@@ -51,10 +52,14 @@ export default class App extends Component {
             avatarSource: null,
             iconLoading:false,
             iconVisible: false,
+            dialogVisible:false,
+            imageSure:false,
+            fileurl:''
         }
     }
 
     componentDidMount() {
+        console.log(this.props.navigation.state)
         const option={
             userId:Global.userId
         };
@@ -72,43 +77,49 @@ export default class App extends Component {
             loading:true
         });
 
-        console.log(this.state.data.data.profilePhoto)
+        // console.log(this.state.data.data.profilePhoto)
     }
 
-    onFileUpload(file, fileName,) {
 
-        console.log(file)
-        let data =new FormData();
-        let file11 = {uri: file, type: 'multipart/form-data', name: 'avatar.jpg'};
-        data.append('userId','1')
-        data.append('avatar',file11);
-        const option ={
-            method:'post',
-            headers:{
-                'Content-Type':'multipart/form-data',
-            },
-            body:data
-        };
-
-        fetch(
-            avatarUrl,
-            option
-        ).then(function(response){
-            if(response.ok){
-                console.log('suc')
-                return response.text();
-            }else{
-                console.log('网络错误，请稍后再试')
-                return ;
-            }
-        }).then(function(data){
-            console.log('imgUrl',data);
-        });
+    onFileUpload(file, fileName,) {  //监听选择完成后的回调
         this.setState({
-            avatarSource:file,
-            iconLoading:true,
-            iconVisible: true
+            dialogVisible:true,
+            fileurl:file
         });
+
+        // let data =new FormData();
+        // let file11 = {uri: file, type: 'multipart/form-data', name: 'avatar.jpg'};
+        // data.append('userId','1')
+        // data.append('avatar',file11);
+        // const option ={
+        //     method:'post',
+        //     headers:{
+        //         'Content-Type':'multipart/form-data',
+        //     },
+        //     body:data
+        // };
+        //
+        // fetch(
+        //     avatarUrl,
+        //     option
+        // ).then(function(response){
+        //     if(response.ok){
+        //         console.log('suc')
+        //         return response.text();
+        //     }else{
+        //         console.log('网络错误，请稍后再试')
+        //         return ;
+        //     }
+        // }).then(function(data){
+        //     console.log('imgUrl',data);
+        // });
+        // this.setState({
+        //     avatarSource:file,
+        //     iconLoading:true,
+        //     iconVisible: true
+        // });
+        //
+
     }
 
     render() {
@@ -203,10 +214,6 @@ export default class App extends Component {
                                         borderColor:'#336699',
                                         borderWidth:3}}
                                 />
-                                <CameraButton
-                                    style={{position:'absolute',top:55,left:50}}
-                                    onFileUpload={this.onFileUpload.bind(this)}
-                                />
                             </View>
                             <View style={{
                                 flex:2,
@@ -214,14 +221,19 @@ export default class App extends Component {
                                 <Text style={{fontSize:utils.style.FONT_SIZE_TITLE}}>
                                     {this.state.data.data.name}
                                 </Text>
-                            </View>
-                            <View style={{
-                                flex:2,
-                                justifyContent:'center',
-                                alignItems:'center'}}>
                                 <Text>
                                     {this.state.data.data.mobile}
                                 </Text>
+                            </View>
+                            <View style={{
+                                flex:1,
+                                flexDirection:'row',
+                                justifyContent:'center',
+                                paddingRight:10,
+                                alignItems:'center'}}>
+                                <CameraButton
+                                    onFileUpload={this.onFileUpload.bind(this)}
+                                />
                             </View>
 
                         </View>
@@ -257,6 +269,57 @@ export default class App extends Component {
                         </List>
                     </View>
                 </ScrollView>:<ViewLoading/>}
+                <ConfirmDialog
+                    contentStyle={{borderRadius:10}}
+                    title="确认上传头像？"
+                    visible={this.state.dialogVisible}
+                    onTouchOutside={() => this.setState({dialogVisible: false})}
+                    positiveButton={{
+                        title: "上传",
+                        onPress: () => {
+                            let data =new FormData();
+                            let file11 = {uri: this.state.fileurl, type: 'multipart/form-data', name: 'avatar.jpg'};
+                            data.append('userId','1')
+                            data.append('avatar',file11);
+                            const option ={
+                                method:'post',
+                                headers:{
+                                    'Content-Type':'multipart/form-data',
+                                },
+                                body:data
+                            };
+
+                            fetch(
+                                avatarUrl,
+                                option
+                            ).then(function(response){
+                                if(response.ok){
+                                    console.log('suc')
+                                    return response.text();
+                                }else{
+                                    console.log('网络错误，请稍后再试')
+                                    return ;
+                                }
+                            }).then(function(data){
+                                console.log('imgUrl',data);
+                            });
+                            this.setState({
+                                avatarSource:this.state.fileurl,
+                                iconLoading:true,
+                                iconVisible: true,
+                                dialogVisible:false
+                            });
+
+                        }
+                    }}
+                    negativeButton={{
+                        title: "取消",
+                        onPress: () => this.setState({
+                            dialogVisible:false
+                        })
+                    }}
+                >
+                </ConfirmDialog>
             </View>
 
         );

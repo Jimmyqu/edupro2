@@ -29,7 +29,6 @@ export default class App extends Component {
        this.props.navigation.navigate('classType',{ type: val.title,courseId:val.courseId })
     };
 
-
     _scheduleUrlCallback(data){
         if(data.code===0){
             const wapper=[[],[],[],[],[],[],[],[]]
@@ -56,7 +55,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-
+        console.log(this.props.navigation.state)
         const  userId  = Global.userId;
         const option={
             userId:userId

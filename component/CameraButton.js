@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 const ImagePicker = require('react-native-image-picker');
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const options = {
     title: '请选择图片',
@@ -49,11 +49,14 @@ class CameraButton extends React.Component {
             <TouchableOpacity
                 onPress={this.showImagePicker.bind(this)}
                 style={[this.props.style,styles.cameraBtn]}>
-                <View>
+                <View style={{flexDirection:'row'}}>
                     <Icon
-                        name="md-camera"
-                        color="#336699"
+                        name="user-circle-o"
+                        color="#008ccf"
                         size={15}/>
+                    <Text style={{fontSize:12,paddingLeft:5}}>
+                        修改头像
+                    </Text>
                 </View>
             </TouchableOpacity>
         )

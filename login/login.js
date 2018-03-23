@@ -4,7 +4,7 @@ import {
     Text,
     View,
     ScrollView,
-    Image
+    Image, BackHandler, ToastAndroid
 } from 'react-native';
 
 import utils from '../component/common/utils'
@@ -35,11 +35,10 @@ export default class login extends Component {
 
     // 请求处理
     handleRe(data){
-        console.log(data)
+        this.setState({
+            progressVisible:false
+        });
         if(data.code==1){
-            this.setState({
-                progressVisible:false
-            })
             if(data.msg==="error_000"){
                 toastShort('服务器连接不上');
             }
@@ -48,9 +47,6 @@ export default class login extends Component {
             }
         }
         if(data.code==0){
-            this.setState({
-                progressVisible:false
-            });
             if(data.data.mobile){
                 toastShort('登录成功');
                 //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
@@ -67,9 +63,9 @@ export default class login extends Component {
 
 
     _checkIn(){
-        this.setState({
-            progressVisible:true
-        })
+        // this.setState({
+        //     progressVisible:true
+        // })
         const data={
             account:this.state.user,
             password:md5.hex_md5(this.state.pass).toUpperCase()
@@ -80,6 +76,28 @@ export default class login extends Component {
             this.handleRe.bind(this)  //传递this 给内部函数
         )
     }
+
+    // componentWillMount(){
+    //     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+    //
+    // }
+    //
+    // componentWillUnmount(){
+    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    // }
+    //
+    // onBackAndroid = () => {
+    //     const s = this.props.navigation;
+    //     console.log(s)
+    //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
+    //         //最近2秒内按过back键，可以退出应用。
+    //         return false;
+    //     }
+    //     this.lastBackPressed = Date.now();
+    //     ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
+    //     return true;
+    //
+    // };
 
     render() {
         return (

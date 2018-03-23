@@ -4701,9 +4701,21 @@ react-devtools-core@3.0.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-android-geolocation@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/react-native-android-geolocation/download/react-native-android-geolocation-1.0.3.tgz#a62fd2e32561ef3fc6c611145e1827338a8c747c"
+
 react-native-background-timer@^2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/react-native-background-timer/download/react-native-background-timer-2.0.1.tgz#ef714a4bfd28fc47cbbd335631b581cf915604a2"
+
+react-native-baidu-location@^0.0.3:
+  version "0.0.3"
+  resolved "http://registry.npm.taobao.org/react-native-baidu-location/download/react-native-baidu-location-0.0.3.tgz#d45b25d4383f19298b9e7cf6ae56ee30a759cf85"
+
+react-native-baidu-map@^0.6.0:
+  version "0.6.0"
+  resolved "http://registry.npm.taobao.org/react-native-baidu-map/download/react-native-baidu-map-0.6.0.tgz#cb4937181e8e0cd2125d347a5b87ca13971647dd"
 
 react-native-button@^2.3.0:
   version "2.3.0"
@@ -4810,6 +4822,10 @@ react-native-vector-icons@^4.5.0:
     lodash "^4.0.0"
     prop-types "^15.5.10"
     yargs "^8.0.2"
+
+react-native-yunpeng-alipay@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/react-native-yunpeng-alipay/download/react-native-yunpeng-alipay-2.0.0.tgz#a9d3d68a5eef2e5c75bb66c460384e1288d9aaad"
 
 react-native@0.53.3:
   version "0.53.3"

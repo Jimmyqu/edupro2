@@ -37,9 +37,11 @@ export default class HomeScreen extends React.Component {
             data:data,
             loading:true
         });
+        console.log(this.state.data)
     }
 
     componentDidMount() {
+        console.log(1)
         const { teacherId } = this.props.navigation.state.params;
         const option={
             teacherId:teacherId
@@ -91,10 +93,10 @@ export default class HomeScreen extends React.Component {
                                         fullStarColor={'#e60012'}
                                         disabled={true}
                                         maxStars={5}
-                                        rating={this.state.data.data.score}
+                                        rating={this.state.data.data.score>3?this.state.data.data.score:3}
                                         starStyle={{marginLeft:5}}
                                     />
-                                    <Text style={{fontSize:utils.style.FONT_SIZE_SMALLER,marginLeft:10}}>{this.state.data.data.score}分</Text>
+                                    <Text style={{fontSize:utils.style.FONT_SIZE_SMALLER,marginLeft:10}}>{this.state.data.data.score>3?this.state.data.data.score:3}分</Text>
                                 </View>
 
                             </List>

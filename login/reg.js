@@ -33,6 +33,10 @@ export default class reg extends Component {
         }
     }
 
+    componentDidMount(){
+        console.log(this.props.navigation.state)
+    }
+
     _submitBtn(){
         const data={
             userId:Global.userId,

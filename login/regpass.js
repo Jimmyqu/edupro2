@@ -33,6 +33,9 @@ export default class reg extends Component {
         }
     }
 
+    componentDidMount(){
+        console.log(this.props.navigation.state)
+    }
     _submitBtn(){
         toastShort('已发送验证码')
         const data={

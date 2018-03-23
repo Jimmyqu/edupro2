@@ -146,6 +146,8 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-baidu-map')
+    compile project(':react-native-yunpeng-alipay')
     compile project(':react-native-vector-icons')
     compile project(':react-native-image-picker')
     compile project(':react-native-background-timer')
