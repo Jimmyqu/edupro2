@@ -4,7 +4,7 @@ import {
     Text,
     View,
     ScrollView,
-    Image, BackHandler, ToastAndroid
+    Image, BackHandler, ToastAndroid,AsyncStorage
 } from 'react-native';
 
 import utils from '../component/common/utils'
@@ -24,20 +24,36 @@ export default class login extends Component {
     constructor(porps) {
         super(porps);
         this.state = {
-            user:'15307104100',
-            pass:'123456',
+            user:'',
+            pass:'',
             progressVisible:false
         }
     }
 
     componentDidMount(){
+        const that=this
+        const keys = ["user","pass"];
+        //根据键数组查询保存的键值对
+        AsyncStorage.multiGet(keys, function(errs, result){
+            //如果发生错误，这里直接返回（return）防止进入下面的逻辑
+            if(errs){
+                return;
+            }
+            //得到的结果是二维数组（result[i][0]表示我们存储的键，result[i][1]表示我们存储的值）
+            that.setState({
+                user: (result[0][1]!=null)?result[0][1]:'',
+                pass: (result[1][1]!=null)?result[1][1]:''
+            });
+        });
     }
 
     // 请求处理
     handleRe(data){
+
         this.setState({
             progressVisible:false
         });
+
         if(data.code==1){
             if(data.msg==="error_000"){
                 toastShort('服务器连接不上');
@@ -48,8 +64,14 @@ export default class login extends Component {
         }
         if(data.code==0){
             if(data.data.mobile){
+                const userData=[['user',this.state.user],['pass',this.state.pass]]
+                AsyncStorage.multiSet(userData, function(errs){
+                    if(errs){
+                        return;
+                    }
+                    console.log('数据保存成功!');
+                })
                 toastShort('登录成功');
-                //AsyncStorage.setItem('id',JSON.stringify(data.data.id))
                 Global.userId=data.data.id;
                 this.props.navigation.dispatch(resetActions)
             }else {
@@ -63,9 +85,6 @@ export default class login extends Component {
 
 
     _checkIn(){
-        // this.setState({
-        //     progressVisible:true
-        // })
         const data={
             account:this.state.user,
             password:md5.hex_md5(this.state.pass).toUpperCase()
@@ -122,6 +141,7 @@ export default class login extends Component {
 
                 <View style={styles.fromContainer}>
                     <FormInput
+                        value={this.state.user}
                         underlineColorAndroid='transparent'
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
@@ -129,6 +149,7 @@ export default class login extends Component {
                         onChangeText={(user)=>this.setState({user})}
                     />
                     <FormInput
+                        value={this.state.pass}
                         underlineColorAndroid='transparent'
                         secureTextEntry={true}
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
@@ -149,7 +170,10 @@ export default class login extends Component {
                 />
                 <View style={styles.textContainer}>
                     <Text style={styles.text}
-                          onPress={() => this.props.navigation.navigate('Regpass')}
+                          onPress={() => {
+                              this.props.navigation.navigate('Regpass')
+                          }
+                        }
                     >
                         忘记密码？
                     </Text>
