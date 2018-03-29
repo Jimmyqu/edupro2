@@ -6,7 +6,8 @@ import {
     View,
     Button,
     Image,
-    ScrollView
+    ScrollView,
+    WebView
 } from 'react-native';
 
 import utils from "../common/utils";
@@ -17,6 +18,14 @@ export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: '公告详情',
     });
+
+    constructor(props) {
+        super(props);
+        this.state={
+            height:400,
+        }
+    }
+
     render() {
         const { params } = this.props.navigation.state;
 
@@ -25,19 +34,49 @@ export default class HomeScreen extends React.Component {
         const D=(new Date(params.createTime).getDate()+1)
         const timer=Y+"-"+M+"-"+D  // 时间戳转时间
         return (
+
             <ScrollView >
                 <Image
                     style={{width:width,height:200,}}
-                    source={{uri:params.url}}
+                    source={params.url?{uri:params.url}:require('../../static/img/1.jpg')}
                 />
-                <View>
-                    <Text style={styles.news_title}>{params.title}</Text>
-                    <Text style={styles.news_time}>{timer}</Text>
-                    <View style={styles.detail_container}>
-                        <Text style={styles.news_detail}>
-                            {params.content}
-                        </Text>
-                    </View>
+                <View style={{height:this.state.height}}>
+                    <WebView
+                        // automaticallyAdjustContentInsets={true}
+                        scalesPageToFit={true} //文字自适应宽度
+                        style={{flex:1,width:width}}
+                        source={{html:`
+        <!DOCTYPE html>
+            <html>
+                <body >
+
+                    <script>window.onload=function()
+                    {
+                        window.location.hash = 1;
+                        document.title = document.body.clientHeight;
+
+                        var imgs=document.getElementsByTagName('img');
+                        for (var i=0;i<imgs.length;i++){
+                            var img = imgs[i];
+                            img.style.width='${width-20}px'
+                        }
+                    }
+                    </script>
+                    ${params.content}
+                </body>
+            </html>
+`,baseUrl: '' }} //转换html 中文乱码
+                        automaticallyAdjustContentInsets={true}
+                        contentInset={{top:0,left:0}}
+                        onNavigationStateChange={(title)=>{
+                            if(title.title != undefined) {
+                                this.setState({
+                                    height:(parseInt(title.title)+20)
+                                })
+                            }
+                        }}
+                    >
+                    </WebView>
                 </View>
             </ScrollView>
         );

@@ -11,59 +11,137 @@ import {
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import utils from "../common/utils";
+import Global from "../common/Global";
+import ViewLoading from '../ViewLoading'
+
+const myCourseUrl=utils.url+'WenDuEducation/api/course/courseList';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         title: '公开课程',
     });
 
-    render() {
-        return (
-            <View >
-                <TouchableOpacity
-                    style={{backgroundColor:'#fff',marginTop:5}}
-                    onPress={() => this.props.navigation.navigate('openClass',{ type: '公开课'})}
-                >
+    constructor(props) {
+        super(props);
+        this.state={
+            myOpenClass: null,
+            loading:false
+        }
+    }
+
+    _todayClass(data){
+        console.log(data.data)
+        const arr=[];
+        for (let i in data.data){
+            arr.push(
+                <View key={i} >
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('openClass',
+                            {
+                                type: '今日课程',
+                                courseId:data.data[i].id,
+                                userId:Global.userId})
+                        }
+                    >
+                        <Image
+                            resizeMode="cover"
+                            blurRadius={1}
+                            style={{width:80,height:70,}}
+                            source={{url:data.data[i].fileUrl}}
+
+                        />
+                        <View style={styles.schedule_item}>
+                            <View style={styles.schedule_item_title}>
+                                <Text style={styles.title_l}>
+                                    {data.data[i].title}
+                                </Text>
+                                <Text style={styles.title_r}>
+                                    课程内容
+                                </Text>
+                            </View>
+                            <View style={styles.schedule_item_container}>
+                                <Text
+                                    style={styles.schedule_item_content}
+                                    numberOfLines={3}
+                                >
+                                    {'        '}{data.data[i].description}
+                                </Text>
+                                <View style={styles.icon_container}>
+                                    <View style={styles.class_item_span}>
+                                        <Icon name="map-marker" size={15} style={{color:"#5eae00",paddingLeft:2}}/>
+                                        <Text
+                                            style={styles.class_item_span_content}
+                                        >
+                                            {data.data[i].address}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.class_item_span}>
+                                        <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
+                                        <Text
+                                            style={styles.class_item_span_content}
+                                        >
+                                            {data.data[i].timeSlot}
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )
+
+        }
+        if(arr.length===0){
+            arr.push(<View key={1} >
+                <TouchableOpacity>
                     <View style={styles.class_item}>
                         <Image
                             resizeMode="cover"
                             blurRadius={1}
                             style={{width:80,height:70,}}
-                            source={require('../img/logo.png')}
+                            source={require('../../static/img/1.jpg')}
                             // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
                         />
                         <View style={styles.item_r}>
-                            <Text style={styles.item_r_title}>心理公开课</Text>
-                            <Text
-                                numberOfLines={2}
-                                style={styles.item_r_content}
-                            >
-                                吾尝终日而思矣15，不如须臾之所学16也；吾尝跂17而望矣，不如登高之博见18也。登高而招19，臂非加长也，而见者远20；顺风而呼，声非加疾21也，而闻者彰22。假舆马者23，非利足也24，而致
-                            </Text>
-
-                            <View style={styles.class_item_span}>
-                                <Icon
-                                    style={{color:"#5eae00"}}
-                                    name="map-marker"
-                                    size={15}
-                                />
-                                <Text
-                                    style={styles.class_item_span_content}
-                                >
-                                    1楼102
-                                </Text>
-                            </View>
-                            <View style={styles.class_item_span}>
-                                <Icon style={{color:"#5eae00"}} name="clock-o" size={15}/>
-                                <Text
-                                    style={styles.class_item_span_content}
-                                >
-                                    2018-03-07  09:30
-                                </Text>
-                            </View>
+                            <Text style={styles.item_r_title}>暂无报名公开课程</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
+            </View>)
+            this.setState({
+                myOpenClass:arr,
+                loading:true
+            });
+        }else {
+            this.setState({
+                myOpenClass:arr,
+                loading:true
+            });
+        }
+
+
+    }
+
+    componentDidMount(){
+        const data={
+            userId:Global.userId,
+            type:1,
+            isSign:1
+        };
+        utils.post(
+            myCourseUrl,
+            utils.toQueryString(data),
+            this._todayClass.bind(this)
+        )
+    }
+    render() {
+        return (
+            <View style={styles.container}>
+                {this.state.loading?<View>
+                    <View style={styles.public_class}>
+                        {this.state.myOpenClass}
+                    </View>
+                </View>:<ViewLoading/>}
             </View>
         );
     }

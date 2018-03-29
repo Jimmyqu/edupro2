@@ -93,14 +93,13 @@ const navigationOptions = ({ navigation, screenProps }) => ({
     headerTitleStyle :{
         textAlign:'center',
         width: '70%',  //文字居中
-
     },
     headerStyle:{backgroundColor:'#2467ff'}, //header颜色
     headerLeft: <Icon
         name={'mail-reply'}
         size={20}
         style={{marginLeft:20,color:"#fff"}}
-        onPress={ () => { navigation.goBack() }} />,
+        onPress={ () => {navigation.goBack()}} />,
 });
 
 const HomeStack= StackNavigator({

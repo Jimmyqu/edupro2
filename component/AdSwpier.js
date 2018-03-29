@@ -42,7 +42,7 @@ export default class stars extends Component {
                         <Image
                             resizeMode='stretch'
                             style={styles.image}
-                            source={{uri:data.data[i].image.url}}
+                            source={data.data[i].image.url?{uri:data.data[i].image.url}:require('../static/img/1.jpg')}
                         />
                     </TouchableOpacity>
             </View>)
@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
 
     image: {
         width:width,
-        flex: 1
+        flex: 1,
+        borderRadius:0
     }
 });
 

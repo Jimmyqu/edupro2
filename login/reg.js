@@ -27,9 +27,9 @@ export default class reg extends Component {
     constructor(porps) {
         super(porps);
         this.state = {
+            studentNum:'',
             mobile:'',
             sms:'',
-
         }
     }
 
@@ -38,28 +38,34 @@ export default class reg extends Component {
     }
 
     _submitBtn(){
-        const data={
-            userId:Global.userId,
-            mobile:this.state.mobile,
-            code:this.state.sms
-        };
-        console.log(data)
-        utils.post(
-            bindUrl,
-            utils.toQueryString(data),
-            ()=>{
-                if(data.code==1){
-                    toastShort('绑定失败');
+
+        if(this.state.studentNum&&this.state.mobile&&this.state.sms){
+            const data={
+                userId:this.state.studentNum,
+                mobile:this.state.mobile,
+                code:this.state.sms
+            };
+            console.log(data)
+            utils.post(
+                bindUrl,
+                utils.toQueryString(data),
+                (data)=>{
+                    console.log(data)
+                    if(data.code==1){
+                        toastShort('绑定失败');
+                    }
+                    if(data.code==0){
+                        toastShort('绑定成功');
+                    }
                 }
-                if(data.code==0){
-                    toastShort('绑定成功');
-                }
-            }
-        );
+            );
+        }else {
+            toastShort('请输入正确格式');
+        }
+
     }
 
     render() {
-        const number = this.props.navigation.state.params.number
 
         return (
             <ScrollView >
@@ -77,12 +83,20 @@ export default class reg extends Component {
                 </View>
                 <View style={styles.fromContainer}>
                     <FormInput
+                        keyboardType={'numeric'}
+                        onChangeText={(studentNum)=>this.setState({studentNum})}
+                        underlineColorAndroid='transparent'
+                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
+                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
+                        placeholder='学号'
+                    />
+                    <FormInput
+                        keyboardType={'numeric'}
                         onChangeText={(mobile)=>this.setState({mobile})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='手机号码'
-
                     />
                     <FormInput
                         onChangeText={(sms)=>this.setState({sms})}
@@ -90,8 +104,10 @@ export default class reg extends Component {
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='验证码'
+
                     />
-                    <View style={{position:'absolute',top:45,right:10,}}>
+
+                    <View style={{position:'absolute',top:85,right:10,}}>
                         <CountDown
                             style={{
                                 backgroundColor:'#008ccf',
@@ -105,6 +121,7 @@ export default class reg extends Component {
                             disableColor={'red'}
                             onClick={(shouldStartCounting)=>{
                                 if(this.state.mobile.length===11){
+
                                     shouldStartCounting(true);
                                     const data={
                                         mobile:this.state.mobile
@@ -116,6 +133,7 @@ export default class reg extends Component {
                                             console.log(this.state.mobile)
                                         }
                                     );
+                                    toastShort('已发送验证码')
                                 }else {
                                     toastShort('请输入正确的手机号')
                                     shouldStartCounting(false)

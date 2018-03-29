@@ -31,6 +31,7 @@ export default class login extends Component {
     }
 
     componentDidMount(){
+        console.log(1)
         const that=this
         const keys = ["user","pass"];
         //根据键数组查询保存的键值对
@@ -57,8 +58,7 @@ export default class login extends Component {
         if(data.code==1){
             if(data.msg==="error_000"){
                 toastShort('服务器连接不上');
-            }
-            if(data.msg==="error_001"){
+            }else {
                 toastShort('账号或密码错误');
             }
         }
@@ -85,15 +85,20 @@ export default class login extends Component {
 
 
     _checkIn(){
-        const data={
-            account:this.state.user,
-            password:md5.hex_md5(this.state.pass).toUpperCase()
-        };
-        utils.post(
-            loginUrl,
-            utils.toQueryString(data),
-            this.handleRe.bind(this)  //传递this 给内部函数
-        )
+        if(this.state.user&&this.state.pass){
+            const data={
+                account:this.state.user,
+                password:md5.hex_md5(this.state.pass).toUpperCase()
+            };
+            utils.post(
+                loginUrl,
+                utils.toQueryString(data),
+                this.handleRe.bind(this)  //传递this 给内部函数
+            )
+        }else {
+            toastShort('请输入正确的手机号和密码');
+        }
+
     }
 
     // componentWillMount(){
@@ -141,6 +146,8 @@ export default class login extends Component {
 
                 <View style={styles.fromContainer}>
                     <FormInput
+
+                        keyboardType={'numeric'}
                         value={this.state.user}
                         underlineColorAndroid='transparent'
                         containerStyle={{width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}

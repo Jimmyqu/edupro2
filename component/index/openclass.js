@@ -10,10 +10,12 @@ import {
 import {Button,List, ListItem } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import utils from '../common/utils'
+import {toastShort} from '../toast'
+import ViewLoading from '../ViewLoading'
 
 const width = utils.size.width;
 const courseInfoUrl=utils.url+'WenDuEducation/api/course/courseInfo';
-const courseSign=utils.url+'WenDuEducation/api/course/courseSign';
+const courseSign=utils.url+'WenDuEducation/api/course/courseJoin';
 // const my=[
 //     {
 //         name: 'Jimmy',
@@ -36,17 +38,24 @@ export default class math extends React.Component {
     }
 
     _courseInfo(data){
+        console.log(data)
         this.setState({
             data:data,
             loading:true,
             isJoin:data.data.isJoin
         });
-
     }
 
     _getClassCallback(data){
         console.log(data)
         //支付to do
+        if(data.data.orderId!==null){
+            this.setState({
+                isJoin:1
+            })
+            toastShort('报名成功')
+        }
+        console.log(this.state.isJoin)
     }
 
     _getClass(){
@@ -81,12 +90,13 @@ export default class math extends React.Component {
         // console.log(this.state.data.data.teacher)
         const type=this.props.navigation.state.params.type==='公开课'; //判断页面
         const my = [this.state.loading?this.state.data.data.teacher:[]];
+        const bgurl=this.props.navigation.state.params.bgUrl
         return (
             <ScrollView style={{paddingBottom:20}}>
                 { /* other code from before here */ }
                 <Image
                     style={styles.img}
-                    source={require('../img/math.png')}
+                    source={bgurl?{uri:bgurl}:require('../img/math.png')}
                 />
                 {this.state.loading?
                     <View>
@@ -112,14 +122,14 @@ export default class math extends React.Component {
                         </List>
                         <View style={styles.math_detail}>
                             <Text>{'       '}{this.state.data.data.description}</Text>
-                            <View style={styles.class_item_money}>
-                                <Icon name="rmb" size={15} style={{color:"#336699"}}/>
-                                <Text
-                                    style={styles.class_item_span_content}
-                                >
-                                    {this.state.data.data.money}元
-                                </Text>
-                            </View>
+                            {/*<View style={styles.class_item_money}>*/}
+                                {/*<Icon name="rmb" size={15} style={{color:"#336699"}}/>*/}
+                                {/*<Text*/}
+                                    {/*style={styles.class_item_span_content}*/}
+                                {/*>*/}
+                                    {/*{this.state.data.data.money}元*/}
+                                {/*</Text>*/}
+                            {/*</View>*/}
                             <View style={styles.icon_container}>
                                 <View style={styles.class_item_span}>
                                     <Icon name="map-marker" size={15} style={{color:"#5eae00"}}/>
@@ -140,14 +150,14 @@ export default class math extends React.Component {
                             </View>
                         </View>
                     </View>
-                    :null}
+                    :<ViewLoading/> }
 
-                {type?<Button
+                {type&&this.state.loading?<Button
                     disabled={this.state.isJoin!==0}
                     small
-                    containerViewStyle={{marginTop:10,height:30}}
+                    containerViewStyle={{marginTop:10,height:30,marginBottom:50}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
-                    buttonStyle={{borderRadius:8,backgroundColor:'#008ccf',height:30}}
+                    buttonStyle={{borderRadius:8,backgroundColor:'#008ccf',height:30,}}
                     title={this.state.isJoin===0?'点击报名':'已报名'}
                     onPress={()=>this._getClass()}
                 />:null}

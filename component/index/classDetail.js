@@ -10,6 +10,7 @@ import {
 import {Button,List, ListItem} from 'react-native-elements'
 import utils from '../common/utils'
 import StarRating from 'react-native-star-rating';
+import ViewLoading from '../ViewLoading'
 
 const teacherUrl = utils.url+'WenDuEducation/api/teacher/teacherInfo';
 const width = utils.size.width;
@@ -68,10 +69,14 @@ export default class HomeScreen extends React.Component {
                 {
                     this.state.loading?
                         (<View>
-                            <Image
-                                style={styles.img}
-                                source={require('../img/math.png')}
-                            />
+                            <View style={{width:width,height:200}}>
+                                <Image
+                                    style={styles.img}
+                                    source={this.state.data.data.profilePhoto?{url:this.state.data.data.profilePhoto}:
+                                        require('../img/math.png')}
+                                />
+                            </View>
+
                             <List containerStyle={{width:width,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center'}}>
                                 {
                                     my.map((l, i) => (
@@ -106,7 +111,7 @@ export default class HomeScreen extends React.Component {
                                     {this.state.data.data.description}
                                 </Text>
                             </View>
-                        </View>):null
+                        </View>):<ViewLoading/>
                 }
 
 

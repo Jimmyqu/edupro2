@@ -19,7 +19,7 @@ import Global from '../component/common/Global'
 
 
 const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
-const bindUrl=utils.url+'WenDuEducation/api/index/bindMobile'
+const bindUrl=utils.url+'WenDuEducation/api/index/searchPwd'
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: '找回密码',
@@ -29,7 +29,7 @@ export default class reg extends Component {
         this.state = {
             mobile:'',
             sms:'',
-
+            password:''
         }
     }
 
@@ -37,25 +37,29 @@ export default class reg extends Component {
         console.log(this.props.navigation.state)
     }
     _submitBtn(){
-        toastShort('已发送验证码')
-        const data={
-            userId:Global.userId,
-            mobile:this.state.mobile,
-            code:this.state.sms
-        };
-        console.log(data)
-        utils.post(
-            bindUrl,
-            utils.toQueryString(data),
-            ()=>{
-                if(data.code==1){
-                    toastShort('绑定失败');
+        if(this.state.mobile&&this.state.sms&&this.state.password){
+            const data={
+                mobile:this.state.mobile,
+                code:this.state.sms,
+                password:this.state.password
+            };
+
+            utils.post(
+                bindUrl,
+                utils.toQueryString(data),
+                (data)=>{
+                    if(data.code==1){
+                        toastShort('修改失败');
+                    }
+                    if(data.code==0){
+                        toastShort('修改成功');
+                    }
                 }
-                if(data.code==0){
-                    toastShort('绑定成功');
-                }
-            }
-        );
+            );
+        }else {
+            toastShort('请输入正确格式');
+        }
+
     }
 
     render() {
@@ -80,6 +84,7 @@ export default class reg extends Component {
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='手机号码'
+                        keyboardType={'numeric'}
 
                     />
                     <FormInput
@@ -110,10 +115,11 @@ export default class reg extends Component {
                                     utils.post(
                                         smsUrl,
                                         utils.toQueryString(data),
-                                        ()=>{
-                                            console.log(this.state.mobile)
+                                        (data)=>{
+                                            console.log(data)
                                         }
                                     );
+                                    toastShort('已发送验证码')
                                 }else {
                                     toastShort('请输入正确的手机号')
                                     shouldStartCounting(false)
@@ -124,22 +130,13 @@ export default class reg extends Component {
                     </View>
                     <FormInput
                         secureTextEntry={true}
-                        value = {this.state.newPassword}  //提交清空
-                        onChangeText={(newPassword)=>this.setState({newPassword})}
+                        value = {this.state.password}  //提交清空
+                        onChangeText={(password)=>this.setState({password})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
                         inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
                         placeholder='请输入新密码'
 
-                    />
-                    <FormInput
-                        secureTextEntry={true}
-                        value = {this.state.renewPassword}  //提交清空
-                        onChangeText={(renewPassword)=>this.setState({renewPassword})}
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
-                        placeholder='请确认新密码'
                     />
 
 

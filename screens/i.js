@@ -11,7 +11,7 @@ import {
     DeviceEventEmitter,
     NativeAppEventEmitter,
     Platform,
-
+    Navigator
 } from 'react-native';
 
 import AdSwiper from '../component/AdSwpier'
@@ -27,6 +27,7 @@ import { Geolocation }  from 'react-native-baidu-map'
 
 const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList';
 const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList';
+const uploadPositionUrl=utils.url+'WenDuEducation/api/user/uploadPosition';
 
 export default class App extends Component{
     constructor(props) {
@@ -44,16 +45,25 @@ export default class App extends Component{
             arr.push(
                 <View key={i} >
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',{type: '公开课',courseId:data.data[i].id,userId:Global.userId})}
+                        onPress={() => this.props.navigation.navigate('openClass',{
+                            type: '公开课',
+                            courseId:data.data[i].id,
+                            userId:Global.userId,
+                            bgUrl:data.data[i].image.url
+                        }
+                        )}
                     >
                         <View style={styles.class_item}>
-                            <Image
-                                resizeMode="cover"
-                                blurRadius={1}
-                                style={{width:80,height:70,}}
-                                source={require('../static/img/1.jpg')}
-                                // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
-                            />
+                            <View style={{width:80,height:70,}}>
+                                <Image
+                                    resizeMode="cover"
+                                    blurRadius={1}
+                                    style={{width:80,height:70,backgroundColor:"red"}}
+                                    source={{uri:data.data[i].image.thumbnaiUrl}}
+                                    // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
+                                />
+                            </View>
+
                             <View style={styles.item_r}>
                                 <Text style={styles.item_r_title}>{data.data[i].title}</Text>
                                 <Text
@@ -65,7 +75,7 @@ export default class App extends Component{
 
                                 <View style={[styles.class_item_span,{marginTop:5}]}>
                                     <Icon
-                                        style={{color:"#5eae00"}}
+                                        style={{color:"#5eae00",paddingLeft:2}}
                                         name="map-marker"
                                         size={15}
                                     />
@@ -131,7 +141,10 @@ export default class App extends Component{
                             {
                                 type: '今日课程',
                                 courseId:data.data[i].id,
-                                userId:Global.userId})
+                                userId:Global.userId,
+                                bgUrl:data.data[i].image.url
+                            })
+
                         }
                     >
                         <View style={styles.schedule_item}>
@@ -152,7 +165,7 @@ export default class App extends Component{
                                 </Text>
                                 <View style={styles.icon_container}>
                                     <View style={styles.class_item_span}>
-                                        <Icon name="map-marker" size={15} style={{color:"#5eae00"}}/>
+                                        <Icon name="map-marker" size={15} style={{color:"#5eae00",paddingLeft:2}}/>
                                         <Text
                                             style={styles.class_item_span_content}
                                         >
@@ -209,15 +222,22 @@ export default class App extends Component{
     }
 
     componentDidMount(){
-        console.log(122)
-        Geolocation.getCurrentPosition()
-            .then(data => {
-                console.log(JSON.stringify(data));
-            })
+
+        // navigator.geolocation.getCurrentPosition(  //自带定位真机可用
+        //     (position) => {
+        //         var crd = position.coords;
+        //         console.warn(crd.latitude);
+        //         console.warn(crd.longitude);
+        //
+        //         // alert(latitude);
+        //         // alert(longitude);
+        //     },
+        //     (error) => alert(error.message),
+        //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        // );
 
 
-
-        // Alipay.pay("signed pay info string").then(function(data){
+        // Alipay.pay("signed pay info string").then(function(data){  //alipay
         //     console.log(data);
         // }, function (err) {
         //     console.log(err);
@@ -227,8 +247,26 @@ export default class App extends Component{
         // const intervalId = BackgroundTimer.setInterval(() => {
         //     // this will be executed every 200 ms
         //     // even when app is the the background
-        //     console.log('tic');
-        // }, 200);
+        //     Geolocation.getCurrentPosition()
+        //         .then(data => {
+        //             return JSON.stringify(data);
+        //         }).then(info=>{
+        //         const option={
+        //             // lon:JSON.parse(info).longitude,
+        //             // lat:JSON.parse(info).latitude,
+        //             lon:114.354982,
+        //             lat:30.524232,
+        //             userId:Global.userId,
+        //         };
+        //         console.log(option)
+        //         utils.post(
+        //             uploadPositionUrl,
+        //             utils.toQueryString(option),
+        //             ()=>{console.log('done')}
+        //         );
+        //     })
+        // }, 5000);
+
 
         const data={
                 userId:Global.userId
@@ -246,6 +284,7 @@ export default class App extends Component{
 
     }
 
+
     // componentWillMount(){
     //     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     //
@@ -256,8 +295,7 @@ export default class App extends Component{
     // }
     //
     // onBackAndroid = () => {
-    //     const s = this.props.navigation;
-    //     console.log(s)
+    //
     //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
     //         //最近2秒内按过back键，可以退出应用。
     //         return false;
@@ -320,6 +358,7 @@ const styles= StyleSheet.create({
     item_r:{
         paddingRight:80,
         paddingLeft:15,
+
     },
     item_r_title:{
         fontSize:utils.style.FONT_SIZE,

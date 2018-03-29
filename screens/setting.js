@@ -5,10 +5,11 @@ import {
     Text,
     View,
     Image,
-    ScrollView
+    ScrollView,
+    TouchableOpacity
 } from 'react-native';
 
-import {List, ListItem} from 'react-native-elements'
+import {List, ListItem,Avatar} from 'react-native-elements'
 import utils from "../component/common/utils";
 import Global from '../component/common/Global'
 import CameraButton from '../component/CameraButton'
@@ -84,7 +85,8 @@ export default class App extends Component {
     onFileUpload(file, fileName,) {  //监听选择完成后的回调
         this.setState({
             dialogVisible:true,
-            fileurl:file
+            fileurl:file,
+            modal:false
         });
 
         // let data =new FormData();
@@ -186,10 +188,11 @@ export default class App extends Component {
 
         return (
             <View style={{flex:1}}>
-                {this.state.loading?<ScrollView
+                {this.state.loading?
+                <ScrollView
                     showsVerticalScrollIndicator={false}
                     style={{flex:1}}
-                >
+                    >
                     <View >
                         <View style={{
                             flexDirection:'row',
@@ -203,16 +206,23 @@ export default class App extends Component {
                             marginTop:10
                         }}>
                             <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-                                <Image
+                                <Avatar
+
+                                    rounded
+                                    medium
                                     source={{uri:this.state.iconLoading?
                                             this.state.avatarSource:
                                             this.state.data.data.profilePhoto}}
-                                    style={{
-                                        width:60,
-                                        height:60,
-                                        borderRadius:60,
-                                        borderColor:'#336699',
-                                        borderWidth:3}}
+                                    onPress={() =>{
+                                        this.setState({
+                                            modal:true
+                                        })
+                                        console.log(this.state.modal)
+                                        console.log(this.state.fileurl)
+                                        }
+
+                                    }
+                                    activeOpacity={0.7}
                                 />
                             </View>
                             <View style={{
@@ -268,6 +278,43 @@ export default class App extends Component {
                             }
                         </List>
                     </View>
+                    {!this.state.modal?null:
+                     <TouchableOpacity
+                         style={{
+                             position:'absolute',
+                             top:0,
+                             width:utils.size.width,height:utils.size.height}}
+                         onPress={()=>{
+
+                             this.setState({modal:false})
+                             console.log(this.state.modal)
+                         }
+                         }>
+                                <View
+                                    style={{
+                                        zIndex: 1,
+                                        position:'absolute',
+                                        top:0,
+                                        backgroundColor:'#000',
+                                        opacity:0.7,
+                                        width:utils.size.width,height:utils.size.height+100}}>
+                                </View>
+                                <Image
+                                    resizemode={'cover'}
+                                    source={{uri:this.state.fileurl}}
+                                    style={{
+                                        position:'absolute',
+                                        top:150,
+                                        borderRadius:5,width:utils.size.width,height:300
+                                    }}
+                                >
+
+                                </Image>
+
+
+
+
+                    </TouchableOpacity>}
                 </ScrollView>:<ViewLoading/>}
                 <ConfirmDialog
                     contentStyle={{borderRadius:10}}
