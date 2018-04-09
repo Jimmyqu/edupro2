@@ -22,8 +22,10 @@ import utils from '../component/common/utils'
 import Global from '../component/common/Global'
 import ViewLoading from '../component/ViewLoading'
 import BackgroundTimer from 'react-native-background-timer';
-import Alipay from 'react-native-yunpeng-alipay';
-import { Geolocation }  from 'react-native-baidu-map'
+import scheduleDetail from "../component/index/scheduleDetail";
+
+import { Location } from 'react-native-baidumap-sdk'
+import {toastShort} from "../component/toast";
 
 const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList';
 const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList';
@@ -35,7 +37,7 @@ export default class App extends Component{
         this.state={
             openClass: null,
             todayClass:null,
-            loading:false
+            loading:false,
         }
     }
 
@@ -58,9 +60,8 @@ export default class App extends Component{
                                 <Image
                                     resizeMode="cover"
                                     blurRadius={1}
-                                    style={{width:80,height:70,backgroundColor:"red"}}
-                                    source={{uri:data.data[i].image.thumbnaiUrl}}
-                                    // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
+                                    style={{width:80,height:70}}
+                                    source={{uri:data.data[i].image.thumbnailUrl}}
                                 />
                             </View>
 
@@ -137,9 +138,9 @@ export default class App extends Component{
             arr.push(
                 <View key={i} >
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',
+                        onPress={() => this.props.navigation.navigate('classType',
                             {
-                                type: '今日课程',
+                                type:data.data[i].title,
                                 courseId:data.data[i].id,
                                 userId:Global.userId,
                                 bgUrl:data.data[i].image.url
@@ -172,14 +173,7 @@ export default class App extends Component{
                                             {data.data[i].address}
                                         </Text>
                                     </View>
-                                    <View style={styles.class_item_span}>
-                                        <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
-                                        <Text
-                                            style={styles.class_item_span_content}
-                                        >
-                                            {data.data[i].timeSlot}
-                                        </Text>
-                                    </View>
+
                                 </View>
                             </View>
                         </View>
@@ -223,18 +217,28 @@ export default class App extends Component{
 
     componentDidMount(){
 
-        // navigator.geolocation.getCurrentPosition(  //自带定位真机可用
-        //     (position) => {
-        //         var crd = position.coords;
-        //         console.warn(crd.latitude);
-        //         console.warn(crd.longitude);
-        //
-        //         // alert(latitude);
-        //         // alert(longitude);
-        //     },
-        //     (error) => alert(error.message),
-        //     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-        // );
+        Location.init().then((d)=> {
+                Location.addLocationListener(location =>
+                    BackgroundTimer.setInterval(()=>{
+                        const option={
+                            lon:location.longitude,
+                            lat:location.latitude,
+                            userId:Global.userId,
+                        };
+                        utils.post(
+                            uploadPositionUrl,
+                            utils.toQueryString(option),
+                            ()=>{
+                                Location.stop()
+                            }
+                        );
+                    },2000)
+                )
+                Location.start()
+            }
+        ).catch((err)=>{
+            toastShort("定位失败"+err)
+        })
 
 
         // Alipay.pay("signed pay info string").then(function(data){  //alipay
@@ -243,30 +247,50 @@ export default class App extends Component{
         //     console.log(err);
         // });
 
-
-        // const intervalId = BackgroundTimer.setInterval(() => {
-        //     // this will be executed every 200 ms
-        //     // even when app is the the background
+        // BackgroundTimer.setInterval(() => {
         //     Geolocation.getCurrentPosition()
         //         .then(data => {
         //             return JSON.stringify(data);
         //         }).then(info=>{
         //         const option={
-        //             // lon:JSON.parse(info).longitude,
-        //             // lat:JSON.parse(info).latitude,
-        //             lon:114.354982,
-        //             lat:30.524232,
+        //             lon:JSON.parse(info).longitude,
+        //             lat:JSON.parse(info).latitude,
         //             userId:Global.userId,
         //         };
-        //         console.log(option)
+        //         alert(option.lon)
         //         utils.post(
         //             uploadPositionUrl,
         //             utils.toQueryString(option),
-        //             ()=>{console.log('done')}
+        //             ()=>{}
         //         );
-        //     })
-        // }, 5000);
+        //     }).catch(e =>{
+        //         console.warn(e, 'error');
+        //     });
+        //
+        // },5000);
 
+        //     navigator.geolocation.getCurrentPosition(  //自带定位真机可用
+        //         (position) => {
+        //             var crd = position.coords;
+        //             console.warn(crd.latitude);
+        //             console.warn(crd.longitude);
+        //             const option={
+        //                 lon:crd.longitude,
+        //                 lat:crd.latitude,
+        //                 userId:Global.userId,
+        //             };
+        //             alert(option.lon)
+        //             utils.post(
+        //                 uploadPositionUrl,
+        //                 utils.toQueryString(option),
+        //                 ()=>{}
+        //             );
+        //             // alert(latitude);
+        //             // alert(longitude);
+        //         },
+        //         (error) => alert(error.message),
+        //         {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+        //     );
 
         const data={
                 userId:Global.userId
@@ -285,28 +309,6 @@ export default class App extends Component{
     }
 
 
-    // componentWillMount(){
-    //     BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
-    //
-    // }
-    //
-    // componentWillUnmount(){
-    //     BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
-    // }
-    //
-    // onBackAndroid = () => {
-    //
-    //     if (this.lastBackPressed && this.lastBackPressed + 2000 >= Date.now()) {
-    //         //最近2秒内按过back键，可以退出应用。
-    //         return false;
-    //     }
-    //     this.lastBackPressed = Date.now();
-    //     ToastAndroid.show('再按一次退出应用', ToastAndroid.SHORT);
-    //     return true;
-    //
-    // };
-
-
     render() {
         const { navigate } = this.props.navigation;
         return (
@@ -319,7 +321,26 @@ export default class App extends Component{
                 />
                 {this.state.loading?<View>
                     <View style={styles.public_class}>
-                        <Text style={styles.title}>[ 公开课 ]</Text>
+                        <View style={{flexDirection:'row',height:40,justifyContent:'space-between'}}>
+                            <Text style={styles.title}>[ 公开课 ]</Text>
+                            <TouchableOpacity
+                                style={{flexDirection:'row'}}
+                                onPress={()=>console.log(this.props.navigation.navigate('allOpenClass'))}
+                            ><Text style={{
+                                    lineHeight:40,
+                                    height:40,
+                                    fontSize:utils.style.FONT_SIZE_SMALL
+                                }}>全部课程</Text>
+                                <Icon
+                                    style={{color:"#E8E8E8",paddingLeft:2, height:40,lineHeight:40,
+                                        paddingRight:15,marginTop:2}}
+                                    name="chevron-right"
+                                    size={utils.style.FONT_SIZE_SMALL}
+                                />
+                            </TouchableOpacity>
+
+                        </View>
+
                         <Divider style={{height:3}}/>
                         {this.state.openClass}
                     </View>

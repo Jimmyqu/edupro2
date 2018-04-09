@@ -3,7 +3,8 @@ package com.edupro;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import org.lovebing.reactnative.baidumap.BaiduMapPackage;
+import cn.qiuxiang.react.baidumap.BaiduMapPackage;
+//import org.lovebing.reactnative.baidumap.BaiduMapPackage;
 import com.yunpeng.alipay.AlipayPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new BaiduMapPackage(getApplicationContext()),
+            new BaiduMapPackage(),
+            //new BaiduMapPackage(getApplicationContext()),
             new AlipayPackage(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),

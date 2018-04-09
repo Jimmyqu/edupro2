@@ -14,7 +14,7 @@ function em(value) {
 const Util = {
     ratio: PixelRatio.get(),  //像素密度
     pixel: 1 / PixelRatio.get(),  //最小像素
-    url:'http://192.168.0.89:8089/',
+    url:'http://192.168.0.250:8093/',
     size: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
@@ -71,6 +71,7 @@ const Util = {
             .then((responseData) => {
                 callback(responseData);
             }).catch(function(err) {
+                console.log(err)
                 alert('网络连接失败')
         })
     }

@@ -38,7 +38,6 @@ export default class HomeScreen extends React.Component {
             data:data,
             loading:true
         });
-        console.log(this.state.data)
     }
 
     componentDidMount() {
@@ -72,8 +71,7 @@ export default class HomeScreen extends React.Component {
                             <View style={{width:width,height:200}}>
                                 <Image
                                     style={styles.img}
-                                    source={this.state.data.data.profilePhoto?{url:this.state.data.data.profilePhoto}:
-                                        require('../img/math.png')}
+                                    source={{uri:this.state.data.data.profilePhoto}}
                                 />
                             </View>
 

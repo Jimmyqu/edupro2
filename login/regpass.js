@@ -103,7 +103,7 @@ export default class reg extends Component {
                             }}
                             textStyle={{color: 'black',fontSize:10}}
                             enable={true}  //是否可用  判断电话
-                            timerCount={10}
+                            timerCount={60}
                             timerTitle={'获取验证码'}
                             disableColor={'red'}
                             onClick={(shouldStartCounting)=>{

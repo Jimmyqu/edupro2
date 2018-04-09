@@ -129,7 +129,7 @@ export default class login extends Component {
                 <ProgressDialog
                     visible={this.state.progressVisible}
                     title=""
-                    message="正在登陆"
+                    message="正在登录"
                 />
                 <View style={styles.container}>
                     <Image
@@ -168,10 +168,10 @@ export default class login extends Component {
 
                 <Button
                     small
-                    containerViewStyle={{marginTop:10,height:40}}
+                    containerViewStyle={{marginTop:50,height:40}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#fabe00'}}
-                    title='登陆'
+                    title='登录'
                     //onPress={() =>this.props.navigation.dispatch(resetActions)}
                     onPress={()=>this._checkIn()}
                 />
@@ -184,14 +184,6 @@ export default class login extends Component {
                     >
                         忘记密码？
                     </Text>
-                    <Text style={styles.text}
-                          onPress={() => this.props.navigation.navigate('Reg',{
-                              number:this.state.user
-                          })}
-                    >
-                        绑定手机
-                    </Text>
-
                 </View>
 
             </ScrollView>
@@ -212,11 +204,11 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     textContainer:{
-        marginTop:15,
-        flexDirection:'row',
+        marginTop:10,
         justifyContent :'space-between',
         marginLeft:15,
-        marginRight:15
+        marginRight:15,
+        alignItems:'center'
     },
     text:{
         fontSize:utils.style.FONT_SIZE_SMALL,

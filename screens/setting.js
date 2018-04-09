@@ -12,6 +12,7 @@ import {
 import {List, ListItem,Avatar} from 'react-native-elements'
 import utils from "../component/common/utils";
 import Global from '../component/common/Global'
+import {toastShort} from '../component/toast'
 import CameraButton from '../component/CameraButton'
 import ViewLoading from '../component/ViewLoading'
 import { ConfirmDialog } from 'react-native-simple-dialogs';
@@ -26,11 +27,15 @@ import { ConfirmDialog } from 'react-native-simple-dialogs';
 
 const settingList = [
     {
+        name:'绑定手机',
+        to:'Reg'
+    },
+    {
         name: '更改密码',
         to:'Forget'
     },
     {
-        name: '公开课程',
+        name: '我的课程',
         to:'MyClass'
     },
     {
@@ -88,50 +93,9 @@ export default class App extends Component {
             fileurl:file,
             modal:false
         });
-
-        // let data =new FormData();
-        // let file11 = {uri: file, type: 'multipart/form-data', name: 'avatar.jpg'};
-        // data.append('userId','1')
-        // data.append('avatar',file11);
-        // const option ={
-        //     method:'post',
-        //     headers:{
-        //         'Content-Type':'multipart/form-data',
-        //     },
-        //     body:data
-        // };
-        //
-        // fetch(
-        //     avatarUrl,
-        //     option
-        // ).then(function(response){
-        //     if(response.ok){
-        //         console.log('suc')
-        //         return response.text();
-        //     }else{
-        //         console.log('网络错误，请稍后再试')
-        //         return ;
-        //     }
-        // }).then(function(data){
-        //     console.log('imgUrl',data);
-        // });
-        // this.setState({
-        //     avatarSource:file,
-        //     iconLoading:true,
-        //     iconVisible: true
-        // });
-        //
-
     }
 
     render() {
-        // const avatarList=[
-        //     {
-        //         name: this.state.data.data.name,
-        //         avatar_url: this.state.data.data.profilePhoto,
-        //         subtitle: this.state.data.data.mobile
-        //     },
-        // ]
         const InfoList=this.state.loading?[
             {
                 name: '姓名',
@@ -187,6 +151,7 @@ export default class App extends Component {
         ];
 
         return (
+
             <View style={{flex:1}}>
                 {this.state.loading?
                 <ScrollView
@@ -211,15 +176,14 @@ export default class App extends Component {
                                     rounded
                                     medium
                                     source={{uri:this.state.iconLoading?
-                                            this.state.avatarSource:
-                                            this.state.data.data.profilePhoto}}
+                                            this.state.avatarSource
+                                            :this.state.data.data.profilePhoto
+                                            }}
                                     onPress={() =>{
                                         this.setState({
                                             modal:true
                                         })
-                                        console.log(this.state.modal)
-                                        console.log(this.state.fileurl)
-                                        }
+                                    }
 
                                     }
                                     activeOpacity={0.7}
@@ -287,7 +251,7 @@ export default class App extends Component {
                          onPress={()=>{
 
                              this.setState({modal:false})
-                             console.log(this.state.modal)
+
                          }
                          }>
                                 <View
@@ -296,12 +260,14 @@ export default class App extends Component {
                                         position:'absolute',
                                         top:0,
                                         backgroundColor:'#000',
-                                        opacity:0.7,
+                                        opacity:0.5,
                                         width:utils.size.width,height:utils.size.height+100}}>
                                 </View>
                                 <Image
                                     resizemode={'cover'}
-                                    source={{uri:this.state.fileurl}}
+                                    source={{uri:this.state.fileurl===''?
+                                            this.state.data.data.profilePhoto
+                                            :this.state.fileurl}}
                                     style={{
                                         position:'absolute',
                                         top:150,
@@ -326,7 +292,7 @@ export default class App extends Component {
                         onPress: () => {
                             let data =new FormData();
                             let file11 = {uri: this.state.fileurl, type: 'multipart/form-data', name: 'avatar.jpg'};
-                            data.append('userId','1')
+                            data.append('userId',Global.userId)
                             data.append('avatar',file11);
                             const option ={
                                 method:'post',
@@ -335,7 +301,6 @@ export default class App extends Component {
                                 },
                                 body:data
                             };
-
                             fetch(
                                 avatarUrl,
                                 option
@@ -344,7 +309,7 @@ export default class App extends Component {
                                     console.log('suc')
                                     return response.text();
                                 }else{
-                                    console.log('网络错误，请稍后再试')
+                                    toastShort('网络错误，请稍后再试')
                                     return ;
                                 }
                             }).then(function(data){

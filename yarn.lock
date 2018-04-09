@@ -892,6 +892,10 @@ babylon@^6.18.0:
   version "6.18.0"
   resolved "http://registry.npm.taobao.org/babylon/download/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
 
+baidumap-sdk@1.1.0:
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/baidumap-sdk/download/baidumap-sdk-1.1.0.tgz#84d2316b32d341dde84cc5422b9c1129f3152b39"
+
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/balanced-match/download/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -3213,6 +3217,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
+kdbush@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/kdbush/download/kdbush-1.0.1.tgz#3cbd03e9dead9c0f6f66ccdb96450e5cecc640e0"
+
 kind-of@^3.0.2:
   version "3.2.2"
   resolved "http://registry.npm.taobao.org/kind-of/download/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -4717,6 +4725,13 @@ react-native-baidu-map@^0.6.0:
   version "0.6.0"
   resolved "http://registry.npm.taobao.org/react-native-baidu-map/download/react-native-baidu-map-0.6.0.tgz#cb4937181e8e0cd2125d347a5b87ca13971647dd"
 
+react-native-baidumap-sdk@^0.5.0:
+  version "0.5.0"
+  resolved "http://registry.npm.taobao.org/react-native-baidumap-sdk/download/react-native-baidumap-sdk-0.5.0.tgz#87b8369754e8a743272edbc201b5e00bc16106ff"
+  dependencies:
+    baidumap-sdk "1.1.0"
+    supercluster "^3.0.2"
+
 react-native-button@^2.3.0:
   version "2.3.0"
   resolved "http://registry.npm.taobao.org/react-native-button/download/react-native-button-2.3.0.tgz#7d0a90095d415b0edf98a904556a7c4439646568"
@@ -5707,6 +5722,12 @@ strip-eof@^1.0.0:
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/strip-json-comments/download/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
+
+supercluster@^3.0.2:
+  version "3.0.2"
+  resolved "http://registry.npm.taobao.org/supercluster/download/supercluster-3.0.2.tgz#370d6b4fcc9381f034f60f950593d7e4de3235ef"
+  dependencies:
+    kdbush "^1.0.1"
 
 supports-color@^2.0.0:
   version "2.0.0"

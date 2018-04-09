@@ -20,6 +20,7 @@ import openClass from './component/index/openclass'
 import classDetail from './component/index/classDetail'
 import classRate from './component/index/classRate'
 import adDetail from './component/index/adDetail'
+import allOpenClass from './component/index/allOpenClass'
 
 //主页面
 import index from './screens/i'
@@ -130,6 +131,9 @@ const HomeStack= StackNavigator({
             header: null,
         },
     },
+    allOpenClass:{
+        screen:allOpenClass
+    },
     公告详情: { screen :adDetail},
     MyClass: { screen : myclass },
     Feedback: { screen : feedback },
@@ -146,7 +150,6 @@ const HomeStack= StackNavigator({
     classRate:{
         screen:classRate
     }
-
 },{
     navigationOptions:navigationOptions
 });

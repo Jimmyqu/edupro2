@@ -99,7 +99,7 @@ export default class math extends React.Component {
                     source={bgurl?{uri:bgurl}:require('../img/math.png')}
                 />
                 {this.state.loading?
-                    <View>
+                    <View style={{marginBottom:50}}>
                         <List containerStyle={{width:width*0.9,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center',marginLeft:width*0.05}}>
                             {
                                 my.map((l, i) => (
@@ -137,14 +137,6 @@ export default class math extends React.Component {
                                         style={styles.class_item_span_content}
                                     >
                                         {this.state.data.data.address}
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        {this.state.data.data.timeSlot}
                                     </Text>
                                 </View>
                             </View>

@@ -19,7 +19,7 @@ import Global from '../component/common/Global'
 
 
 const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
-const bindUrl=utils.url+'WenDuEducation/api/index/bindMobile'
+const bindUrl=utils.url+'WenDuEducation/api/index/bindMobile';
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: '绑定手机',
@@ -27,21 +27,20 @@ export default class reg extends Component {
     constructor(porps) {
         super(porps);
         this.state = {
-            studentNum:'',
             mobile:'',
             sms:'',
         }
     }
 
     componentDidMount(){
-        console.log(this.props.navigation.state)
+
     }
 
     _submitBtn(){
 
-        if(this.state.studentNum&&this.state.mobile&&this.state.sms){
+        if(this.state.mobile&&this.state.sms){
             const data={
-                userId:this.state.studentNum,
+                userId:Global.userId,
                 mobile:this.state.mobile,
                 code:this.state.sms
             };
@@ -50,9 +49,10 @@ export default class reg extends Component {
                 bindUrl,
                 utils.toQueryString(data),
                 (data)=>{
-                    console.log(data)
                     if(data.code==1){
-                        toastShort('绑定失败');
+                        if(data.msg==='error_011'){
+                            toastShort('验证码错误')
+                        }
                     }
                     if(data.code==0){
                         toastShort('绑定成功');
@@ -84,14 +84,6 @@ export default class reg extends Component {
                 <View style={styles.fromContainer}>
                     <FormInput
                         keyboardType={'numeric'}
-                        onChangeText={(studentNum)=>this.setState({studentNum})}
-                        underlineColorAndroid='transparent'
-                        containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
-                        inputStyle={{width:utils.size.width,backgroundColor:"#fff",fontSize:utils.style.FONT_SIZE_SMALL}}
-                        placeholder='学号'
-                    />
-                    <FormInput
-                        keyboardType={'numeric'}
                         onChangeText={(mobile)=>this.setState({mobile})}
                         underlineColorAndroid='transparent'
                         containerStyle={{marginLeft:0,width:utils.size.width,borderWidth:1,borderColor:'#dcdddd',height:40}}
@@ -107,7 +99,7 @@ export default class reg extends Component {
 
                     />
 
-                    <View style={{position:'absolute',top:85,right:10,}}>
+                    <View style={{position:'absolute',top:45,right:10,}}>
                         <CountDown
                             style={{
                                 backgroundColor:'#008ccf',
@@ -116,7 +108,7 @@ export default class reg extends Component {
                             }}
                             textStyle={{color: 'black',fontSize:10}}
                             enable={true}  //是否可用  判断电话
-                            timerCount={10}
+                            timerCount={60}
                             timerTitle={'获取验证码'}
                             disableColor={'red'}
                             onClick={(shouldStartCounting)=>{

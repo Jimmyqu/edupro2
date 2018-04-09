@@ -14,85 +14,82 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import utils from "../common/utils";
 import Global from "../common/Global";
 import ViewLoading from '../ViewLoading'
+import {Divider} from 'react-native-elements'
 
 const myCourseUrl=utils.url+'WenDuEducation/api/course/courseList';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: '我的课程',
+        title: '全部课程',
     });
 
     constructor(props) {
         super(props);
         this.state={
-            myOpenClass: null,
+            openClass: null,
             loading:false
         }
     }
 
-    _todayClass(data){
-        console.log(data.data)
+    _openClass(data){
         const arr=[];
         for (let i in data.data){
             arr.push(
                 <View key={i} >
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',
-                            {
-                                type: '今日课程',
+                        onPress={() => this.props.navigation.navigate('openClass',{
+                                type: '公开课',
                                 courseId:data.data[i].id,
                                 userId:Global.userId,
                                 bgUrl:data.data[i].image.url
-                            })
-                        }
+                            }
+                        )}
                     >
-                        <Image
-                            resizeMode="cover"
-                            blurRadius={1}
-                            style={{width:80,height:70,}}
-                            source={{url:data.data[i].fileUrl}}
-
-                        />
-                        <View style={styles.schedule_item}>
-                            <View style={styles.schedule_item_title}>
-                                <Text style={styles.title_l}>
-                                    {data.data[i].title}
-                                </Text>
-                                <Text style={styles.title_r}>
-                                    课程内容
-                                </Text>
+                        <View style={styles.class_item}>
+                            <View style={{width:80,height:70,}}>
+                                <Image
+                                    resizeMode="cover"
+                                    blurRadius={1}
+                                    style={{width:80,height:70}}
+                                    source={{uri:data.data[i].image.thumbnailUrl}}
+                                />
                             </View>
-                            <View style={styles.schedule_item_container}>
+
+                            <View style={styles.item_r}>
+                                <Text style={styles.item_r_title}>{data.data[i].title}</Text>
                                 <Text
-                                    style={styles.schedule_item_content}
-                                    numberOfLines={3}
+                                    numberOfLines={2}
+                                    style={styles.item_r_content}
                                 >
-                                    {'        '}{data.data[i].description}
+                                    {data.data[i].description}
                                 </Text>
-                                <View style={styles.icon_container}>
-                                    <View style={styles.class_item_span}>
-                                        <Icon name="map-marker" size={15} style={{color:"#5eae00",paddingLeft:2}}/>
-                                        <Text
-                                            style={styles.class_item_span_content}
-                                        >
-                                            {data.data[i].address}
-                                        </Text>
-                                    </View>
-                                    <View style={styles.class_item_span}>
-                                        <Icon name="clock-o" size={15} style={{color:"#5eae00"}}/>
-                                        <Text
-                                            style={styles.class_item_span_content}
-                                        >
-                                            {data.data[i].timeSlot}
-                                        </Text>
-                                    </View>
+
+                                <View style={[styles.class_item_span,{marginTop:5}]}>
+                                    <Icon
+                                        style={{color:"#5eae00",paddingLeft:2}}
+                                        name="map-marker"
+                                        size={15}
+                                    />
+                                    <Text
+                                        style={styles.class_item_span_content}
+                                    >
+                                        {data.data[i].address}
+                                    </Text>
+                                </View>
+                                <View style={styles.class_item_span}>
+                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={15}/>
+                                    <Text
+                                        style={styles.class_item_span_content}
+                                    >
+                                        {data.data[i].timeSlot}
+                                    </Text>
                                 </View>
                             </View>
                         </View>
                     </TouchableOpacity>
+                    <Divider style={{height:3}}/>
                 </View>
             )
-
         }
         if(arr.length===0){
             arr.push(<View key={1} >
@@ -106,22 +103,22 @@ export default class HomeScreen extends React.Component {
                             // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
                         />
                         <View style={styles.item_r}>
-                            <Text style={styles.item_r_title}>暂无报名公开课程</Text>
+                            <Text style={styles.item_r_title}>暂无课程</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
+                <Divider style={{height:3}}/>
             </View>)
             this.setState({
-                myOpenClass:arr,
+                openClass:arr,
                 loading:true
             });
         }else {
             this.setState({
-                myOpenClass:arr,
+                openClass:arr,
                 loading:true
             });
         }
-
 
     }
 
@@ -129,20 +126,21 @@ export default class HomeScreen extends React.Component {
         const data={
             userId:Global.userId,
             type:1,
-            isSign:1
+            isSign:0
         };
         utils.post(
             myCourseUrl,
             utils.toQueryString(data),
-            this._todayClass.bind(this)
+            this._openClass.bind(this)
         )
     }
     render() {
+
         return (
             <ScrollView style={styles.container}>
                 {this.state.loading?<View>
                     <View style={styles.public_class}>
-                        {this.state.myOpenClass}
+                        {this.state.openClass}
                     </View>
                 </View>:<ViewLoading/>}
             </ScrollView>
