@@ -216,7 +216,6 @@ export default class App extends Component{
     }
 
     componentDidMount(){
-
         Location.init().then((d)=> {
                 Location.addLocationListener(location =>
                     BackgroundTimer.setInterval(()=>{
@@ -295,6 +294,7 @@ export default class App extends Component{
         const data={
                 userId:Global.userId
             };
+            console.log(data.userId)
             utils.post(
                 openClassUrl,
                 utils.toQueryString(data),
@@ -325,7 +325,7 @@ export default class App extends Component{
                             <Text style={styles.title}>[ 公开课 ]</Text>
                             <TouchableOpacity
                                 style={{flexDirection:'row'}}
-                                onPress={()=>console.log(this.props.navigation.navigate('allOpenClass'))}
+                                onPress={()=>this.props.navigation.navigate('allOpenClass')}
                             ><Text style={{
                                     lineHeight:40,
                                     height:40,
@@ -367,7 +367,8 @@ const styles= StyleSheet.create({
         fontSize:utils.style.FONT_SIZE_TITLE,
         fontWeight:'bold',
         paddingTop:5,
-        paddingBottom:5
+        paddingBottom:5,
+        color:'#000'
     },
     class_item:{
         flexDirection:'row',
@@ -383,7 +384,8 @@ const styles= StyleSheet.create({
     },
     item_r_title:{
         fontSize:utils.style.FONT_SIZE,
-        fontWeight:'bold'
+        fontWeight:'bold',
+        color:'#000'
     },
     item_r_content:{
         fontSize:utils.style.FONT_SIZE_SMALL,

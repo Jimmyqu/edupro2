@@ -178,7 +178,8 @@ const styles= StyleSheet.create({
     },
     item_r_title:{
         fontSize:utils.style.FONT_SIZE,
-        fontWeight:'bold'
+        fontWeight:'bold',
+        color:"#000"
     },
     item_r_content:{
         fontSize:utils.style.FONT_SIZE_SMALL,

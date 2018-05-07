@@ -254,6 +254,20 @@ export default class App extends Component {
 
                          }
                          }>
+
+                                 <Image
+                                     resizemode={'cover'}
+                                     source={{uri:this.state.fileurl===''?
+                                             this.state.data.data.profilePhoto
+                                             :this.state.fileurl}}
+                                     style={{
+                                         position:'absolute',
+                                         top:150,
+                                         borderRadius:5,width:utils.size.width,height:300
+                                     }}
+                                 >
+
+                                 </Image>
                                 <View
                                     style={{
                                         zIndex: 1,
@@ -263,19 +277,7 @@ export default class App extends Component {
                                         opacity:0.5,
                                         width:utils.size.width,height:utils.size.height+100}}>
                                 </View>
-                                <Image
-                                    resizemode={'cover'}
-                                    source={{uri:this.state.fileurl===''?
-                                            this.state.data.data.profilePhoto
-                                            :this.state.fileurl}}
-                                    style={{
-                                        position:'absolute',
-                                        top:150,
-                                        borderRadius:5,width:utils.size.width,height:300
-                                    }}
-                                >
 
-                                </Image>
 
 
 

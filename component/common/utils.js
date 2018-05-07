@@ -14,7 +14,7 @@ function em(value) {
 const Util = {
     ratio: PixelRatio.get(),  //像素密度
     pixel: 1 / PixelRatio.get(),  //最小像素
-    url:'http://192.168.0.250:8093/',
+    url:'http://47.104.236.86/',
     size: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height
