@@ -26,6 +26,7 @@ import allOpenClass from './component/index/allOpenClass'
 import index from './screens/i'
 import Schedule from './screens/Schedule'
 import setting from './screens/setting'
+import score from './screens/score'
 
 //登陆注册
 import login from './login/login'
@@ -69,7 +70,19 @@ const TabMain = TabNavigator({
                 />
             ),
         }),
-    }
+    },
+    // 成绩: { screen: score,
+    //     navigationOptions: ({navigation}) => ({
+    //         title: '我的成绩',
+    //         tabBarIcon: ({focused, tintColor})=>(
+    //             <Icon
+    //                 size={20}
+    //                 name={'newspaper-o'}
+    //                 style={focused?{color:'#e71c22'}:{color:'#fff'}}
+    //             />
+    //         ),
+    //     }),
+    // }
 
 },{
     tabBarPosition:'bottom',
