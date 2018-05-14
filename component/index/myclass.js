@@ -83,7 +83,7 @@ export default class HomeScreen extends React.Component {
                                         <Text
                                             style={styles.class_item_span_content}
                                         >
-                                            {data.data[i].timeSlot}
+                                            {data.data[i].timeSlot.slice(5,16)}
                                         </Text>
                                     </View>
                                 </View>

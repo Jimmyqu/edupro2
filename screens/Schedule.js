@@ -42,9 +42,9 @@ export default class App extends Component {
                             })
                         }
                     }
-
                 }
             }
+
             this.setState({
                 data:wapper,
                 loading:true
@@ -108,7 +108,6 @@ export default class App extends Component {
 
                     </Table>
                 </View>
-
                 <View style={styles.card}>
                     <Table
                         style={{backgroundColor:'#fff'}}

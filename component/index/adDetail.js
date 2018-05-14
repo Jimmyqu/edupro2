@@ -71,7 +71,7 @@ export default class HomeScreen extends React.Component {
                         onNavigationStateChange={(title)=>{
                             if(title.title != undefined) {
                                 this.setState({
-                                    height:(parseInt(title.title)+400)
+                                    height:(parseInt(title.title)+200)
                                 })
                             }
                         }}

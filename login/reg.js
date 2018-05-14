@@ -29,6 +29,7 @@ export default class reg extends Component {
         this.state = {
             mobile:'',
             sms:'',
+            btnState:true
         }
     }
 
@@ -107,25 +108,33 @@ export default class reg extends Component {
                                 borderRadius:5
                             }}
                             textStyle={{color: 'black',fontSize:10}}
-                            enable={true}  //是否可用  判断电话
+                            enable={this.state.btnState}  //是否可用  判断电话
                             timerCount={60}
                             timerTitle={'获取验证码'}
                             disableColor={'red'}
                             onClick={(shouldStartCounting)=>{
                                 if(this.state.mobile.length===11){
-
+                                    this.setState({btnState:false})
                                     shouldStartCounting(true);
                                     const data={
-                                        mobile:this.state.mobile
+                                        mobile:this.state.mobile,
+                                        type:0
                                     };
                                     utils.post(
                                         smsUrl,
                                         utils.toQueryString(data),
-                                        ()=>{
-                                            console.log(this.state.mobile)
+                                        (data)=>{
+                                            console.log(data)
+                                            if(data.code===0){
+                                                toastShort('请求成功,请查看手机')
+                                                this.setState({btnState:true})
+                                            }else if(data.code===1){
+                                                toastShort('请求失败,请稍后再试')
+                                                this.setState({btnState:true})
+                                            }
                                         }
                                     );
-                                    toastShort('已发送验证码')
+
                                 }else {
                                     toastShort('请输入正确的手机号')
                                     shouldStartCounting(false)

@@ -99,7 +99,7 @@ const navigationOptions = ({ navigation, screenProps }) => ({
     headerLeft: <Icon
         name={'mail-reply'}
         size={20}
-        style={{marginLeft:20,color:"#fff"}}
+        style={{marginLeft:20,color:"#fff",paddingLeft:8,paddingRight:8}}
         onPress={ () => {navigation.goBack()}} />,
 });
 

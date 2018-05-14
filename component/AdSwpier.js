@@ -40,7 +40,6 @@ export default class stars extends Component {
                         })}
                     >
                         <Image
-                            resizeMode='stretch'
                             style={styles.image}
                             source={data.data[i].image.url?{uri:data.data[i].image.url}:require('../static/img/1.jpg')}
                         />
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
 
     image: {
         width:width,
-        flex: 1,
+        height:200,
         borderRadius:0
     }
 });

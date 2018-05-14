@@ -61,7 +61,7 @@ export default class App extends Component{
                                     resizeMode="cover"
                                     blurRadius={1}
                                     style={{width:80,height:70}}
-                                    source={{uri:data.data[i].image.thumbnailUrl}}
+                                    source={{uri:data.data[i].image.url}}
                                 />
                             </View>
 
@@ -91,7 +91,7 @@ export default class App extends Component{
                                     <Text
                                         style={styles.class_item_span_content}
                                     >
-                                        {data.data[i].timeSlot}
+                                        {data.data[i].timeSlot.slice(5,16)}
                                     </Text>
                                 </View>
                             </View>
@@ -134,6 +134,7 @@ export default class App extends Component{
 
     _todayClass(data){
         const arr=[];
+        console.log(data)
         for (let i in data.data){
             arr.push(
                 <View key={i} >
@@ -166,14 +167,21 @@ export default class App extends Component{
                                 </Text>
                                 <View style={styles.icon_container}>
                                     <View style={styles.class_item_span}>
+                                        <Icon name="bookmark" size={15} style={{color:"#5eae00",paddingLeft:2}}/>
+                                        <Text
+                                            style={styles.class_item_span_content}
+                                        >
+                                            {`第${data.data[i].turnNumber}节`}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.class_item_span}>
                                         <Icon name="map-marker" size={15} style={{color:"#5eae00",paddingLeft:2}}/>
                                         <Text
                                             style={styles.class_item_span_content}
                                         >
-                                            {data.data[i].address}
+                                            {data.data[i].areaInfo.name+'-'+data.data[i].address}
                                         </Text>
                                     </View>
-
                                 </View>
                             </View>
                         </View>
@@ -219,6 +227,10 @@ export default class App extends Component{
         Location.init().then((d)=> {
                 Location.addLocationListener(location =>
                     BackgroundTimer.setInterval(()=>{
+                        Global.pos={
+                            lon:location.longitude,
+                            lat:location.latitude,
+                        }
                         const option={
                             lon:location.longitude,
                             lat:location.latitude,

@@ -26,7 +26,7 @@ export default class login extends Component {
         this.state = {
             user:'',
             pass:'',
-            progressVisible:false
+            loginLoading:false
         }
     }
 
@@ -52,8 +52,8 @@ export default class login extends Component {
     handleRe(data){
 
         this.setState({
-            progressVisible:false
-        });
+            loginLoading:false
+        })
 
         if(data.code==1){
             if(data.msg==="error_000"){
@@ -86,6 +86,9 @@ export default class login extends Component {
 
     _checkIn(){
         if(this.state.user&&this.state.pass){
+            this.setState({
+                loginLoading:true
+            })
             const data={
                 account:this.state.user,
                 password:md5.hex_md5(this.state.pass).toUpperCase()
@@ -126,11 +129,7 @@ export default class login extends Component {
     render() {
         return (
             <ScrollView >
-                <ProgressDialog
-                    visible={this.state.progressVisible}
-                    title=""
-                    message="正在登录"
-                />
+
                 <View style={styles.container}>
                     <Image
                         resizeMode={'contain'}
@@ -169,10 +168,12 @@ export default class login extends Component {
                 <Button
                     small
                     containerViewStyle={{marginTop:50,height:40}}
+                    disabled={this.state.loginLoading}
                     // icon={{name: 'envira', type: 'font-awesome'}}
+                    loading={this.state.loginLoading}
                     buttonStyle={{borderRadius:8,backgroundColor:'#fabe00'}}
-                    title='登录'
-                    //onPress={() =>this.props.navigation.dispatch(resetActions)}
+                    loadingProps={{ size: "10", color: "rgba(111, 202, 186, 1)" }}
+                    title={this.state.loginLoading?'正在登录':'登录'}
                     onPress={()=>this._checkIn()}
                 />
                 <View style={styles.textContainer}>

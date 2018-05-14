@@ -94,10 +94,13 @@ export default class math extends React.Component {
         return (
             <ScrollView style={{paddingBottom:20}}>
                 { /* other code from before here */ }
-                <Image
-                    style={styles.img}
-                    source={bgurl?{uri:bgurl}:require('../img/math.png')}
-                />
+                <View style={{width:width,height:200,backgroundColor:'#fff'}}>
+                    <Image
+                        resizeMode = {'contain'}
+                        style={styles.img}
+                        source={bgurl?{uri:bgurl}:require('../img/math.png')}
+                    />
+                </View>
                 {this.state.loading?
                     <View style={{marginBottom:50}}>
                         <List containerStyle={{width:width*0.9,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center',marginLeft:width*0.05}}>
@@ -107,7 +110,7 @@ export default class math extends React.Component {
                                         roundAvatar
                                         avatarStyle={{height:50,width:50,borderRadius:50}} avatarOverlayContainerStyle={{height:50,width:50,borderRadius:50}}
                                         avatarContainerStyle={{height:50,width:50,borderRadius:50}}
-                                        avatar={{uri:l.profilePhoto}}
+                                        avatar={l.profilePhoto?{uri:l.profilePhoto}:require('../img/math.png')}
                                         subtitle={l.place }
                                         rightTitleStyle={{fontSize:utils.style.FONT_SIZE}}
                                         containerStyle={{justifyContent:'center'}}

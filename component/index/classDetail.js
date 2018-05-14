@@ -68,10 +68,11 @@ export default class HomeScreen extends React.Component {
                 {
                     this.state.loading?
                         (<View>
-                            <View style={{width:width,height:200}}>
+                            <View style={{width:width,height:200,backgroundColor:'#fff'}}>
                                 <Image
+                                    resizeMode = {'contain'}
                                     style={styles.img}
-                                    source={{uri:this.state.data.data.profilePhoto}}
+                                    source={this.state.data.data.profilePhoto?{uri:this.state.data.data.profilePhoto}:require('../img/math.png')}
                                 />
                             </View>
 

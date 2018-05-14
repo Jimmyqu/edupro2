@@ -27,7 +27,8 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             starCount: 3,
-            classRate:''
+            classRate:'',
+            loginLoading:false
         };
     }
 
@@ -38,6 +39,7 @@ export default class HomeScreen extends React.Component {
     }
 
     _submitCallback(data){
+        console.log(data)
         if(data.code===1){
             if(data.msg==='error_016'){
                 toastShort('课程已评价');
@@ -45,20 +47,32 @@ export default class HomeScreen extends React.Component {
             if(data.msg==='error_014'){
                 toastShort('未报名该课程');
             }
+            if(data.msg==='error_015'){
+                toastShort('找不到课程');
+            }
+            if(data.msg==='error_016'){
+                toastShort('课程已评价过');
+            }
+
 
         }
         if(data.code===0){
             toastShort('评价成功');
 
         }
-
+            loginLoading:false
         this.setState({
             starCount: 3,
-            classRate:''
+            classRate:'',
+            loginLoading:false
         });
     }
 
     _submitBtn(){
+        this.setState({
+            loginLoading:true
+        })
+
         const data={
             userId:1,
             courseId:1,
@@ -112,10 +126,13 @@ export default class HomeScreen extends React.Component {
                 </View>
                 <Button
                     small
+                    disabled={this.state.loginLoading}
+                    loading={this.state.loginLoading}
+                    loadingProps={{ size: "10", color: "rgba(111, 202, 186, 1)" }}
                     containerViewStyle={{marginTop:10,height:40}}
                     // icon={{name: 'envira', type: 'font-awesome'}}
                     buttonStyle={{borderRadius:8,backgroundColor:'#008ccf',height:40}}
-                    title='提交'
+                    title={this.state.loginLoading?'正在提交':'提交'}
                     onPress={()=>this._submitBtn()}
 
                 />
