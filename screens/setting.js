@@ -47,8 +47,8 @@ const settingList = [
         to:'Update'
     },
 ];
-const settingUrl =utils.url+'WenDuEducation/api/index/getInfo';
-const avatarUrl =utils.url+'WenDuEducation/api/index/modifyAvatar';
+const settingUrl =utils.url+'CollegeManager/api/index/getInfo';
+const avatarUrl =utils.url+'CollegeManager/api/index/modifyAvatar';
 export default class App extends Component {
     constructor(props) {
         super(props);

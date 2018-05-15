@@ -17,7 +17,7 @@ import CountDown from 'react-native-smscode-count-down'
 import md5 from "react-native-md5";
 import {toastShort} from '../component/toast'
 
-const modifyPwdUrl=utils.url+'WenDuEducation/api/index/modifyPwd';
+const modifyPwdUrl=utils.url+'CollegeManager/api/index/modifyPwd';
 
 export default class login extends Component {
     static navigationOptions = ({ navigation }) => ({
@@ -71,12 +71,12 @@ export default class login extends Component {
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/logo.png')}
-                        style={{width:100,height:80}}
+                        style={{width:140,height:140}}
                     />
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/in.png')}
-                        style={{width:80,height:60}}
+                        style={{width:140,height:60}}
                     />
                 </View>
                 <View style={styles.fromContainer}>

@@ -12,6 +12,7 @@ function em(value) {
 }
 
 const Util = {
+    version:'1.0',
     ratio: PixelRatio.get(),  //像素密度
     pixel: 1 / PixelRatio.get(),  //最小像素
     url:'http://47.104.236.86/',
@@ -20,10 +21,10 @@ const Util = {
         height: Dimensions.get('window').height
     },
     style :{
-        FONT_SIZE: em(0.8),
-        FONT_SIZE_SMALLER: em(0.6),
-        FONT_SIZE_SMALL: em(0.7),
-        FONT_SIZE_TITLE: em(1),
+        FONT_SIZE: em(0.7),
+        FONT_SIZE_SMALLER: em(0.5),
+        FONT_SIZE_SMALL: em(0.6),
+        FONT_SIZE_TITLE: em(0.8),
 
     },
     em(value) {

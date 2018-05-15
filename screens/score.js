@@ -12,7 +12,7 @@ import {toastShort} from '../component/toast';
 import Global from '../component/common/Global'
 
 
-const loginUrl =utils.url+'WenDuEducation/api/index/login';
+const loginUrl =utils.url+'CollegeManager/api/index/login';
 
 export default class login extends Component {
     constructor(porps) {

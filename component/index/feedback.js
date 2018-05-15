@@ -14,7 +14,7 @@ import {toastShort} from "../toast";
 
 
 const width = utils.size.width;
-const feedbackUrl=utils.url+'WenDuEducation/api/index/submitFeedback';
+const feedbackUrl=utils.url+'CollegeManager/api/index/submitFeedback';
 
 export default class HomeScreen extends React.Component {
 

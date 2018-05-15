@@ -7,7 +7,8 @@ import {
     Button,
     TouchableOpacity,
     Image,
-    ScrollView
+    ScrollView,
+    Linking
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -16,34 +17,80 @@ import Global from "../common/Global";
 import ViewLoading from '../ViewLoading'
 import {Divider} from 'react-native-elements'
 
-const myCourseUrl=utils.url+'WenDuEducation/api/course/courseList';
+const myCourseUrl=utils.url+'CollegeManager/api/course/courseList';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        title: '全部课程',
+        title: '全部资源',
     });
 
     constructor(props) {
         super(props);
         this.state={
             openClass: null,
-            loading:false
+            loading:false,
+            mockData:[
+                {
+                    title:'考研路上有我陪伴',
+                    content:'考研是一场自我的抉择，犹如经历一场寒冬，路只有一条，孤立无助，迷茫而彷徨，命运需自己掌握，相信你一定能成功，等待破茧成蝶的那一刻，我们一直陪伴着你，跨越困难，走向顶峰，多少个日夜，成就你心中的梦想，不忘初心，为梦而生！',
+                    img:require('../img/indexMock/1.png'),
+                    url:'http://www.iqiyi.com/v_19rrbkvy4w.html#vfrm=8-8-0-1'
+                },
+                {
+                    title:'2019考研英语“波妈”全程陪伴课程',
+                    content:'“波妈”陪伴课基础段内容：针对单词进行补充强化，以长难句的形式学习语法，操练五大热考小作文题型；英语一“波妈”陪伴课强化段内容：对真题进行查漏补缺，对阅读、完形、翻译、新题型进行全面突破，作文批改；英语二“波妈”陪伴课强化段内容：包括真题讲解和作文讲解，真题操练和注意事项，作文批改突破作文瓶颈；英语一“波妈”陪伴课冲刺段内容：模拟考试，进行全面操练和讲解，针对大作文预测五道题；英语二“波妈”陪伴课冲刺段内容：内部密卷，模拟考试，大作文预测，大作文批改。',
+                    img:require('../img/indexMock/2.png'),
+                    url:'http://www.iqiyi.com/v_19rrca1lgg.html#vfrm=8-8-0-1'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第一集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/3.png'),
+                    url:'http://www.iqiyi.com/v_19rrc0ezis.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第二集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/4.png'),
+                    url:'http://www.iqiyi.com/v_19rrciudys.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第三集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/5.png'),
+                    url:'http://www.iqiyi.com/v_19rrcit0bc.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第四集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/6.png'),
+                    url:'http://www.iqiyi.com/v_19rrcj1rv0.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第五集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/7.png'),
+                    url:'http://www.iqiyi.com/v_19rrcj2630.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第六集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../img/indexMock/8.png'),
+                    url:'http://www.iqiyi.com/v_19rrcibgy4.html'
+                },
+            ]
         }
     }
 
     _openClass(data){
+        const mockArr=this.state.mockData
+        console.log(mockArr)
         const arr=[];
-        for (let i in data.data){
+        for (let i in mockArr){
             arr.push(
                 <View key={i} >
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',{
-                                type: '公开课',
-                                courseId:data.data[i].id,
-                                userId:Global.userId,
-                                bgUrl:data.data[i].image.url
-                            }
-                        )}
+                        onPress={() => Linking.openURL(mockArr[i].url)}
                     >
                         <View style={styles.class_item}>
                             <View style={{width:80,height:70,}}>
@@ -51,39 +98,19 @@ export default class HomeScreen extends React.Component {
                                     resizeMode="cover"
                                     blurRadius={1}
                                     style={{width:80,height:70}}
-                                    source={{uri:data.data[i].image.thumbnailUrl}}
+                                    source={mockArr[i].img}
+                                    // source={{uri:this.state.mockData[i].img}}
                                 />
                             </View>
 
                             <View style={styles.item_r}>
-                                <Text style={styles.item_r_title}>{data.data[i].title}</Text>
+                                <Text style={styles.item_r_title}>{mockArr[i].title}</Text>
                                 <Text
-                                    numberOfLines={2}
+                                    numberOfLines={4}
                                     style={styles.item_r_content}
                                 >
-                                    {data.data[i].description}
+                                    {mockArr[i].content}
                                 </Text>
-
-                                <View style={[styles.class_item_span,{marginTop:5}]}>
-                                    <Icon
-                                        style={{color:"#5eae00",paddingLeft:2}}
-                                        name="map-marker"
-                                        size={15}
-                                    />
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        {data.data[i].address}
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={15}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        {data.data[i].timeSlot}
-                                    </Text>
-                                </View>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -91,58 +118,27 @@ export default class HomeScreen extends React.Component {
                 </View>
             )
         }
-        if(arr.length===0){
-            arr.push(<View key={1} >
-                <TouchableOpacity>
-                    <View style={styles.class_item}>
-                        <Image
-                            resizeMode="cover"
-                            blurRadius={1}
-                            style={{width:80,height:70,}}
-                            source={require('../../static/img/1.jpg')}
-                            // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
-                        />
-                        <View style={styles.item_r}>
-                            <Text style={styles.item_r_title}>暂无课程</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                <Divider style={{height:3}}/>
-            </View>)
-            this.setState({
-                openClass:arr,
-                loading:true
-            });
-        }else {
-            this.setState({
-                openClass:arr,
-                loading:true
-            });
-        }
+
+        this.setState({
+            openClass:arr,
+            loading:true
+        });
+
 
     }
 
     componentDidMount(){
-        const data={
-            userId:Global.userId,
-            type:1,
-            isSign:0
-        };
-        utils.post(
-            myCourseUrl,
-            utils.toQueryString(data),
-            this._openClass.bind(this)
-        )
+        this._openClass()
     }
     render() {
 
         return (
             <ScrollView style={styles.container}>
-                {this.state.loading?<View>
+                <View>
                     <View style={styles.public_class}>
                         {this.state.openClass}
                     </View>
-                </View>:<ViewLoading/>}
+                </View>
             </ScrollView>
         );
     }

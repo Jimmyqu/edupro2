@@ -20,8 +20,8 @@ import ViewLoading from '../ViewLoading'
 import BackgroundTimer from "react-native-background-timer";
 
 const width = utils.size.width;
-const courseInfoUrl=utils.url+'WenDuEducation/api/course/courseInfo';
-const SignUrl=utils.url+'WenDuEducation/api/course/courseSign';
+const courseInfoUrl=utils.url+'CollegeManager/api/course/courseInfo';
+const SignUrl=utils.url+'CollegeManager/api/course/courseSign';
 
 export default class math extends React.Component {
 
@@ -92,7 +92,7 @@ export default class math extends React.Component {
 
         this.setState({
             btnLoading:true
-        })
+        });
         const {courseId} = this.props.navigation.state.params;
         const option={
             lon:Global.pos.lon,
@@ -166,10 +166,6 @@ export default class math extends React.Component {
                     />
                 </View>
 
-                <Image
-                    style={styles.img}
-                    source={{uri:this.state.data.image.url}}
-                />
                 <List containerStyle={{width:width*0.9,height:60,marginTop: 10, borderTopWidth: 0, borderBottomWidth: 0, borderBottomColor: '#cbd2d9',justifyContent:'center',marginLeft:width*0.05}}>
                         {
                             my.map((l, i) => (

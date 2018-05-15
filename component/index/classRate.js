@@ -16,7 +16,7 @@ import {toastShort} from '../toast';
 import Global from "../common/Global";
 
 const width = utils.size.width;
-const rateUrl=utils.url+'WenDuEducation/api/course/courseEvaluate';
+const rateUrl=utils.url+'CollegeManager/api/course/courseEvaluate';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({

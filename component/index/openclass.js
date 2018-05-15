@@ -14,8 +14,8 @@ import {toastShort} from '../toast'
 import ViewLoading from '../ViewLoading'
 
 const width = utils.size.width;
-const courseInfoUrl=utils.url+'WenDuEducation/api/course/courseInfo';
-const courseSign=utils.url+'WenDuEducation/api/course/courseJoin';
+const courseInfoUrl=utils.url+'CollegeManager/api/course/courseInfo';
+const courseSign=utils.url+'CollegeManager/api/course/courseJoin';
 // const my=[
 //     {
 //         name: 'Jimmy',
@@ -87,7 +87,6 @@ export default class math extends React.Component {
     }
 
     render() {
-        // console.log(this.state.data.data.teacher)
         const type=this.props.navigation.state.params.type==='公开课'; //判断页面
         const my = [this.state.loading?this.state.data.data.teacher:[]];
         const bgurl=this.props.navigation.state.params.bgUrl
@@ -125,14 +124,6 @@ export default class math extends React.Component {
                         </List>
                         <View style={styles.math_detail}>
                             <Text>{'       '}{this.state.data.data.description}</Text>
-                            {/*<View style={styles.class_item_money}>*/}
-                                {/*<Icon name="rmb" size={15} style={{color:"#336699"}}/>*/}
-                                {/*<Text*/}
-                                    {/*style={styles.class_item_span_content}*/}
-                                {/*>*/}
-                                    {/*{this.state.data.data.money}元*/}
-                                {/*</Text>*/}
-                            {/*</View>*/}
                             <View style={styles.icon_container}>
                                 <View style={styles.class_item_span}>
                                     <Icon name="map-marker" size={15} style={{color:"#5eae00"}}/>

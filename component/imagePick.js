@@ -12,6 +12,7 @@ import {
 import  CameraBtn from './CameraButton'
 import Spinner from 'react-native-loading-spinner-overlay';
 import utils from '../component/common/utils'
+const uploadUrl =utils.url+'CollegeManager/api/index/modifyAvatar';
 
 class imagePick extends React.Component {
     constructor(props){
@@ -43,7 +44,7 @@ class imagePick extends React.Component {
         };
 
         fetch(
-            'http://192.168.0.89:8089/WenDuEducation/api/index/modifyAvatar',
+            uploadUrl,
             option
         ).then(function(response){
             if(response.ok){

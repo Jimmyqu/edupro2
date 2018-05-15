@@ -18,8 +18,8 @@ import {toastShort} from '../component/toast'
 import Global from '../component/common/Global'
 
 
-const smsUrl=utils.url+'WenDuEducation/api/index/sendCode';
-const bindUrl=utils.url+'WenDuEducation/api/index/searchPwd'
+const smsUrl=utils.url+'CollegeManager/api/index/sendCode';
+const bindUrl=utils.url+'CollegeManager/api/index/searchPwd'
 export default class reg extends Component {
     static navigationOptions = ({ navigation }) => ({
         title: '找回密码',
@@ -70,12 +70,12 @@ export default class reg extends Component {
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/logo.png')}
-                        style={{width:100,height:80}}
+                        style={{width:140,height:140}}
                     />
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/in.png')}
-                        style={{width:80,height:60}}
+                        style={{width:140,height:60}}
                     />
                 </View>
                 <View style={styles.fromContainer}>

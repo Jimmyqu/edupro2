@@ -12,7 +12,7 @@ import utils from '../common/utils'
 import StarRating from 'react-native-star-rating';
 import ViewLoading from '../ViewLoading'
 
-const teacherUrl = utils.url+'WenDuEducation/api/teacher/teacherInfo';
+const teacherUrl = utils.url+'CollegeManager/api/teacher/teacherInfo';
 const width = utils.size.width;
 // const my=[
 //     {

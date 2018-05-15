@@ -15,7 +15,7 @@ import utils from "../common/utils";
 import Global from "../common/Global";
 import ViewLoading from '../ViewLoading'
 
-const myCourseUrl=utils.url+'WenDuEducation/api/course/courseList';
+const myCourseUrl=utils.url+'CollegeManager/api/course/courseList';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
@@ -99,7 +99,7 @@ export default class HomeScreen extends React.Component {
                 <TouchableOpacity>
                     <View style={styles.class_item}>
                         <Image
-                            resizeMode="cover"
+                            resizeMode={'contain'}
                             blurRadius={1}
                             style={{width:80,height:70,}}
                             source={require('../../static/img/1.jpg')}

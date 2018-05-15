@@ -15,7 +15,7 @@ import {NavigationActions} from 'react-navigation';
 import Global from '../component/common/Global'
 import { ProgressDialog } from 'react-native-simple-dialogs';
 
-const loginUrl =utils.url+'WenDuEducation/api/index/login';
+const loginUrl =utils.url+'CollegeManager/api/index/login';
 const resetActions = NavigationActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({routeName: 'Home',params:{ userId: 'bar' }})]
@@ -134,12 +134,12 @@ export default class login extends Component {
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/logo.png')}
-                        style={{width:100,height:80}}
+                        style={{width:140,height:140}}
                     />
                     <Image
                         resizeMode={'contain'}
                         source={require('../component/img/in.png')}
-                        style={{width:80,height:60}}
+                        style={{width:140,height:60}}
                     />
                 </View>
 

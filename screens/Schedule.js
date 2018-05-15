@@ -13,7 +13,7 @@ import Global from "../component/common/Global";
 import ViewLoading from '../component/ViewLoading'
 import {toastShort} from '../component/toast';
 
-const scheduleUrl=utils.url+'WenDuEducation/api/course/courseTable';
+const scheduleUrl=utils.url+'CollegeManager/api/course/courseTable';
 
 export default class App extends Component {
     constructor(props) {

@@ -6,6 +6,8 @@ import {
     Image,
     ScrollView,
     TouchableOpacity,
+    Alert,
+    Linking,
     BackHandler,
     ToastAndroid,
     DeviceEventEmitter,
@@ -27,10 +29,10 @@ import scheduleDetail from "../component/index/scheduleDetail";
 import { Location } from 'react-native-baidumap-sdk'
 import {toastShort} from "../component/toast";
 
-const openClassUrl =utils.url+'WenDuEducation/api/index/newCourseList';
-const todayClassUrl =utils.url+'WenDuEducation/api/index/todayCourseList';
-const uploadPositionUrl=utils.url+'WenDuEducation/api/user/uploadPosition';
-
+const openClassUrl =utils.url+'CollegeManager/api/index/newCourseList';
+const todayClassUrl =utils.url+'CollegeManager/api/index/todayCourseList';
+const uploadPositionUrl=utils.url+'CollegeManager/api/user/uploadPosition';
+const versionUrl=utils.url+'CollegeManager/api/index/getVersion';
 export default class App extends Component{
     constructor(props) {
         super(props);
@@ -38,22 +40,70 @@ export default class App extends Component{
             openClass: null,
             todayClass:null,
             loading:false,
+            updateLink:'',
+            mockData:[
+                {
+                    title:'考研路上有我陪伴',
+                    content:'考研是一场自我的抉择，犹如经历一场寒冬，路只有一条，孤立无助，迷茫而彷徨，命运需自己掌握，相信你一定能成功，等待破茧成蝶的那一刻，我们一直陪伴着你，跨越困难，走向顶峰，多少个日夜，成就你心中的梦想，不忘初心，为梦而生！',
+                    img:require('../component/img/indexMock/1.png'),
+                    url:'http://www.iqiyi.com/v_19rrbkvy4w.html#vfrm=8-8-0-1'
+                },
+                {
+                    title:'2019考研英语“波妈”全程陪伴课程',
+                    content:'“波妈”陪伴课基础段内容：针对单词进行补充强化，以长难句的形式学习语法，操练五大热考小作文题型；英语一“波妈”陪伴课强化段内容：对真题进行查漏补缺，对阅读、完形、翻译、新题型进行全面突破，作文批改；英语二“波妈”陪伴课强化段内容：包括真题讲解和作文讲解，真题操练和注意事项，作文批改突破作文瓶颈；英语一“波妈”陪伴课冲刺段内容：模拟考试，进行全面操练和讲解，针对大作文预测五道题；英语二“波妈”陪伴课冲刺段内容：内部密卷，模拟考试，大作文预测，大作文批改。',
+                    img:require('../component/img/indexMock/2.png'),
+                    url:'http://www.iqiyi.com/v_19rrca1lgg.html#vfrm=8-8-0-1'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第一集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/3.png'),
+                    url:'http://www.iqiyi.com/v_19rrc0ezis.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第二集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/4.png'),
+                    url:'http://www.iqiyi.com/v_19rrciudys.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第三集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/5.png'),
+                    url:'http://www.iqiyi.com/v_19rrcit0bc.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第四集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/6.png'),
+                    url:'http://www.iqiyi.com/v_19rrcj1rv0.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第五集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/7.png'),
+                    url:'http://www.iqiyi.com/v_19rrcj2630.html'
+                },
+                {
+                    title:'2019唐五龙考研数学九章突破班第六集',
+                    content:'做学霸，跟对老师就能事半功倍，唐五龙老师是数学名师，十年考研辅导经验，考研数学新生代主力军，熟悉考生弱点和应试难点，深知命题规律和重点，授课针对性强，效果显著。',
+                    img:require('../component/img/indexMock/8.png'),
+                    url:'http://www.iqiyi.com/v_19rrcibgy4.html'
+                },
+            ]
         }
     }
 
     _openClass(data){
+        const mockArr=this.state.mockData.slice(0,3)
+
         const arr=[];
-        for (let i in data.data){
+        for (let i in mockArr){
+
             arr.push(
                 <View key={i} >
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('openClass',{
-                            type: '公开课',
-                            courseId:data.data[i].id,
-                            userId:Global.userId,
-                            bgUrl:data.data[i].image.url
-                        }
-                        )}
+                        onPress={() => Linking.openURL(mockArr[i].url)}
                     >
                         <View style={styles.class_item}>
                             <View style={{width:80,height:70,}}>
@@ -61,39 +111,19 @@ export default class App extends Component{
                                     resizeMode="cover"
                                     blurRadius={1}
                                     style={{width:80,height:70}}
-                                    source={{uri:data.data[i].image.url}}
+                                    source={mockArr[i].img}
+                                    // source={{uri:this.state.mockData[i].img}}
                                 />
                             </View>
 
                             <View style={styles.item_r}>
-                                <Text style={styles.item_r_title}>{data.data[i].title}</Text>
+                                <Text style={styles.item_r_title}>{mockArr[i].title}</Text>
                                 <Text
-                                    numberOfLines={2}
+                                    numberOfLines={4}
                                     style={styles.item_r_content}
                                 >
-                                    {data.data[i].description}
+                                    {mockArr[i].content}
                                 </Text>
-
-                                <View style={[styles.class_item_span,{marginTop:5}]}>
-                                    <Icon
-                                        style={{color:"#5eae00",paddingLeft:2}}
-                                        name="map-marker"
-                                        size={15}
-                                    />
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        {data.data[i].address}
-                                    </Text>
-                                </View>
-                                <View style={styles.class_item_span}>
-                                    <Icon style={{color:"#5eae00"}} name="clock-o" size={15}/>
-                                    <Text
-                                        style={styles.class_item_span_content}
-                                    >
-                                        {data.data[i].timeSlot.slice(5,16)}
-                                    </Text>
-                                </View>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -106,14 +136,14 @@ export default class App extends Component{
                 <TouchableOpacity>
                     <View style={styles.class_item}>
                         <Image
-                            resizeMode="cover"
+                            resizeMode={'contain'}
                             blurRadius={1}
                             style={{width:80,height:70,}}
                             source={require('../static/img/1.jpg')}
                             // defaultSource={require('../static/img/1.jpg')} //IOS 安卓无
                         />
                         <View style={styles.item_r}>
-                            <Text style={styles.item_r_title}>暂无课程</Text>
+                            <Text style={styles.item_r_title}>暂无资源</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -223,7 +253,42 @@ export default class App extends Component{
 
     }
 
+    //version link
+    confirm(){
+        Linking.openURL(this.state.updateLink) .catch((err)=>{
+            alert('下载出错', err);
+        });
+    }
     componentDidMount(){
+        this._openClass()
+
+
+        //请求版本号
+        fetch(versionUrl,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            }
+        })
+            .then((response) => {
+            return response.json()
+        })
+            .then((responseData) => {
+                console.log(responseData);
+                this.setState({
+                    updateLink:responseData.data.url
+                });
+                if(responseData.data.num!==utils.version){
+                    Alert.alert('版本更新','有新版本请点击确认更新',[
+                        {
+                        text:"确认",
+                        onPress:this.confirm.bind(this)}
+                    ]);
+                }
+            })
+
+        //上传定位
         Location.init().then((d)=> {
                 Location.addLocationListener(location =>
                     BackgroundTimer.setInterval(()=>{
@@ -307,11 +372,7 @@ export default class App extends Component{
                 userId:Global.userId
             };
             console.log(data.userId)
-            utils.post(
-                openClassUrl,
-                utils.toQueryString(data),
-                this._openClass.bind(this)
-            );
+
             utils.post(
                 todayClassUrl,
                 utils.toQueryString(data),
@@ -324,44 +385,46 @@ export default class App extends Component{
     render() {
         const { navigate } = this.props.navigation;
         return (
-            <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={styles.container}
-            >
-                <AdSwiper
-                    navigate={navigate}
-                />
-                {this.state.loading?<View>
-                    <View style={styles.public_class}>
-                        <View style={{flexDirection:'row',height:40,justifyContent:'space-between'}}>
-                            <Text style={styles.title}>[ 公开课 ]</Text>
-                            <TouchableOpacity
-                                style={{flexDirection:'row'}}
-                                onPress={()=>this.props.navigation.navigate('allOpenClass')}
-                            ><Text style={{
+            <View style={{flex:1}}>
+                {this.state.loading?<ScrollView
+                    showsVerticalScrollIndicator={false}
+                    style={styles.container}
+                >
+                    <AdSwiper
+                        navigate={navigate}
+                    />
+                    <View>
+                        <View style={styles.public_class}>
+                            <View style={{flexDirection:'row',height:40,justifyContent:'space-between'}}>
+                                <Text style={styles.title}>[ 课程资源 ]</Text>
+                                <TouchableOpacity
+                                    style={{flexDirection:'row'}}
+                                    onPress={()=>this.props.navigation.navigate('allOpenClass')}
+                                ><Text style={{
                                     lineHeight:40,
                                     height:40,
                                     fontSize:utils.style.FONT_SIZE_SMALL
-                                }}>全部课程</Text>
-                                <Icon
-                                    style={{color:"#E8E8E8",paddingLeft:2, height:40,lineHeight:40,
-                                        paddingRight:15,marginTop:2}}
-                                    name="chevron-right"
-                                    size={utils.style.FONT_SIZE_SMALL}
-                                />
-                            </TouchableOpacity>
+                                }}>全部资源</Text>
+                                    <Icon
+                                        style={{color:"#E8E8E8",paddingLeft:2, height:40,lineHeight:40,
+                                            paddingRight:15,marginTop:2}}
+                                        name="chevron-right"
+                                        size={utils.style.FONT_SIZE_SMALL}
+                                    />
+                                </TouchableOpacity>
 
+                            </View>
+
+                            <Divider style={{height:3}}/>
+                            {this.state.openClass}
                         </View>
-
+                        <Text style={styles.title}>[ 今日课表 ]</Text>
                         <Divider style={{height:3}}/>
-                        {this.state.openClass}
+                        {this.state.todayClass}
                     </View>
-                    <Text style={styles.title}>[ 今日课表 ]</Text>
-                    <Divider style={{height:3}}/>
-                    {this.state.todayClass}
-                </View>:<ViewLoading/>}
+                </ScrollView>:<ViewLoading/>}
+            </View>
 
-            </ScrollView>
         );
     }
 }

@@ -15,7 +15,7 @@ import ViewLoading from './ViewLoading'
 
 const width = utils.width;
 // const url='http://rap2api.taobao.org/app/mock/5504/GET//example/1517900324538'  //mock
-const url=utils.url+'WenDuEducation/api/index/noticeList'
+const url=utils.url+'CollegeManager/api/index/noticeList'
 export default class stars extends Component {
 
     constructor(porps) {

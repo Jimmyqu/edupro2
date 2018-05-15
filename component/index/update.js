@@ -25,13 +25,13 @@ export default class HomeScreen extends React.Component {
                 <Image
                     resizeMode={'contain'}
                     source={require('../img/logo.png')}
-                    style={{width:100,height:80}}
+                    style={{width:140,height:140}}
                 />
 
                 <Image
                     resizeMode={'contain'}
                     source={require('../img/in.png')}
-                    style={{width:80,height:60}}
+                    style={{width:140,height:60}}
                 />
                 <Button
                     small
